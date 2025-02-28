@@ -52,7 +52,10 @@
 <h1><center><b>My Account</b></center></h1>
   <h2>Sign in with Scratch and unlock special services on the Coding Hut website.</h2>
   
-But it is currently Coming Soon.</body>
+But it is currently Coming Soon.
+
+<button id="myButton">Click me</button>
+</body>
 </html>
 
 <style>body {
@@ -230,3 +233,11 @@ But it is currently Coming Soon.</body>
     padding: 0 20px;
   }
 }</style>
+
+<script>
+  const myButton = document.getElementById("myButton");
+  myButton.addEventListener("click", function() {
+    // add your JavaScript code here
+    alert("Button clicked!");
+  });
+</script>
