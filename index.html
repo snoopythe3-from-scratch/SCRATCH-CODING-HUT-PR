@@ -1,233 +1,143 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <style>body {
-  overflow-x: hidden;
-  font-family: Sans-Serif;
-  margin: 0;
-}
+    <style>
+      body {
+        overflow-x: hidden;
+        font-family: Sans-Serif;
+        margin: 0;
+      }
 
-.menu-container {
-  position: relative;
-  display: flex;
-  align-items: center;
-  margin-bottom: 20px;
-  background: #c04d4d;
-  color: #ffffff;
-  padding: 20px;
-  z-index: 1;
-  -webkit-user-select: none;
-  user-select: none;
-  box-sizing: border-box;
-}
+      .menu-container {
+        position: relative;
+        display: flex;
+        align-items: center;
+        margin-bottom: 20px;
+        background: #c04d4d;
+        color: #ffffff;
+        padding: 20px;
+        z-index: 1;
+        -webkit-user-select: none;
+        user-select: none;
+        box-sizing: border-box;
+      }
 
-.menu-logo {
-  line-height: 0;
-  margin: 0 20px;
-}
+      .menu-logo {
+        line-height: 0;
+        margin: 0 20px;
+      }
 
-.menu-logo img {
-  max-height: 40px;
-  max-width: 100px;
-  flex-shrink: 0;
-}
+      .menu-logo img {
+        max-height: 40px;
+        max-width: 100px;
+        flex-shrink: 0;
+      }
 
-.menu-container a {
-  text-decoration: none;
-  color: #c04d4d;
-  transition: color 0.3s ease;
-}
+      .menu-container a {
+        text-decoration: none;
+        color: #ffffff;
+        transition: color 0.3s ease;
+      }
 
-.menu-container a:hover {
-  color: #50e3c2;
-}
+      .menu-container a:hover {
+        color: #50e3c2;
+      }
 
-.menu-container input {
-  display: block;
-  width: 35px;
-  height: 25px;
-  margin: 0;
-  position: absolute;
-  cursor: pointer;
-  opacity: 0; /* hide this */
-  z-index: 2; /* and place it over the hamburger */
-  -webkit-touch-callout: none;
-}
+      .menu-container input {
+        display: block;
+        width: 35px;
+        height: 25px;
+        position: absolute;
+        cursor: pointer;
+        opacity: 0;
+        z-index: 2;
+      }
 
-/* Burger menu */
-.menu-container span {
-  display: block;
-  width: 33px;
-  height: 4px;
-  margin-bottom: 5px;
-  position: relative;
-  background: #ffffff;
-  border-radius: 3px;
-  z-index: 1;
-  transform-origin: 4px 0px;
-  transition: transform 0.5s cubic-bezier(0.77,0.2,0.05,1.0),
-              background 0.5s cubic-bezier(0.77,0.2,0.05,1.0),
-              opacity 0.55s ease;
-}
+      .menu-container span {
+        display: block;
+        width: 33px;
+        height: 4px;
+        margin-bottom: 5px;
+        background: #ffffff;
+        border-radius: 3px;
+        transition: all 0.5s;
+      }
 
-.menu-container span:first-child {
-  transform-origin: 0% 0%;
-}
+      .menu {
+        display: none;
+        position: absolute;
+        right: 0;
+        top: 60px;
+        background: #ffffff;
+        padding: 20px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      }
 
-.menu-container span:nth-child(3) {
-  transform-origin: 0% 100%;
-}
+      .menu ul {
+        list-style: none;
+        padding: 0;
+      }
 
-.menu-container input:checked ~ span {
-  opacity: 1;
-  transform: rotate(45deg) translate(3px,-1px);
-  background: #c04d4d;
-}
+      .menu li {
+        padding: 10px 0;
+      }
 
-.menu-container input:checked ~ span:nth-child(4) {
-  opacity: 0;
-  transform: rotate(0deg) scale(0.2, 0.2);
-}
+      .auth-status {
+        padding: 10px;
+        background: #f4f4f4;
+        text-align: center;
+        font-size: 18px;
+      }
 
-.menu-container input:checked ~ span:nth-child(3) {
-  transform: rotate(-45deg) translate(-5px,11px);
-}
-
-.menu ul {
-  list-style: none;
-}
-
-.menu li {
-  padding: 10px 0;
-  font-size: 22px;
-}
-
-/* mobile styles */
-@media only screen and (max-width: 767px) { 
-  .menu-container {
-    flex-direction: column;
-    align-items: flex-end;
-  }
-  
-  .menu-logo {
-    position: absolute;
-    left: 0;
-    top: 50%;
-    transform: translateY(-50%);
-  }
-
-  .menu-logo img {
-    max-height: 30px;
-  }
-
-  .menu {
-    position: absolute;
-    box-sizing: border-box;
-    width: 300px;
-    right: -300px;
-    top: 0;
-    margin: -20px;
-    padding: 75px 50px 50px;
-    background: #ffffff;
-    -webkit-font-smoothing: antialiased;
-    /* to stop flickering of text in safari */
-    transform-origin: 0% 0%;
-    transform: translateX(0%);
-    transition: transform 0.5s cubic-bezier(0.77,0.2,0.05,1.0);
-  }
-
-  .menu-container input:checked ~ .menu {
-    transform: translateX(-100%);
-  }
-}
-
-/* desktop styles */
-@media only screen and (min-width: 768px) { 
-  .menu-container {
-    width: 100%;
-  }
-
-  .menu-container a {
-    color: #ffffff;
-  }
-
-  .menu-container input {
-    display: none;
-  }
-
-  /* Burger menu */
-  .menu-container span {
-    display: none;
-  }
-
-  .menu {
-    position: relative;
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-  }
-
-  .menu ul {
-    display: flex;
-    padding: 0;
-  }
-
-  .menu li {
-    padding: 0 20px;
-  }
-}</style>
-   <title>Coding Hut Website.</title>
-    
-<nav class="menu-container">
-  <!-- burger menu -->
-  <input type="checkbox" aria-label="Toggle menu" />
-  <span></span>
-  <span></span>
-  <span></span>
-
-  <!-- logo -->
-  <a href="scratch-coding-hut.github.io" class="menu-logo">
-    <img src="https://i.postimg.cc/6qgPbyGH/temp-Image-BJ164c.avif" alt="My Awesome Website"/>
-  </a>
-
-  <!-- menu items -->
-  <div class="menu">
-    <ul>
-      <li>
-        <a href="https://scratch-coding-hut.github.io">
-          Home
-        </a>
-      </li>
-      <li>
-        <a href="https://scratch-coding-hut.github.io/about">
-          About
-        </a>
-      </li>
-      <li>
-        <a href="https://scratch.mit.edu/discuss/topic/652178/">
-          Scratch Forum Post
-        </a>
-      </li>
-      <li>
-        <a href="https://scratch-coding-hut.github.io/sitemaplinks">
-          More...
-        </a>
-      </li>
-    </ul>
-    <ul>
-      <li>
-        <a href="https://scratch-coding-hut.github.io/account">
-          My Account
-        </a>
-      </li>
-    </ul>
-  </div>
-</nav>
+      @media (max-width: 767px) {
+        .menu {
+          width: 100%;
+          right: 0;
+          text-align: center;
+        }
+      }
+    </style>
+    <title>Coding Hut Website</title>
   </head>
   <body>
-<h1><center><b>Coding Hut</b></center></h1>
-  <h2>Welcome to the offical Coding Hut website.</h2>
-  
-Remember that Coding Hut was founded by @MyScratchedAccount on the Dec. 27, 2022</body>
-</body>
+    <nav class="menu-container">
+      <input type="checkbox" id="menu-toggle" />
+      <span></span>
+      <span></span>
+      <span></span>
+      <a href="https://scratch-coding-hut.github.io" class="menu-logo">
+        <img src="https://i.postimg.cc/6qgPbyGH/temp-Image-BJ164c.avif" alt="Coding Hut" />
+      </a>
+      <div class="menu" id="menu">
+        <ul>
+          <li><a href="https://scratch-coding-hut.github.io">Home</a></li>
+          <li><a href="https://scratch-coding-hut.github.io/about">About</a></li>
+          <li><a href="https://scratch.mit.edu/discuss/topic/652178/">Scratch Forum</a></li>
+          <li><a href="https://scratch-coding-hut.github.io/sitemaplinks">More...</a></li>
+          <li><a href="https://scratch-coding-hut.github.io/account" id="account-link">My Account</a></li>
+        </ul>
+      </div>
+    </nav>
+    
+    <div class="auth-status" id="authStatus">Checking login status...</div>
+    
+    <h1><center><b>Coding Hut</b></center></h1>
+    <h2>Welcome to the official Coding Hut website.</h2>
+    <p>Remember that Coding Hut was founded by @MyScratchedAccount on Dec. 27, 2022.</p>
+    
+    <script>
+      function updateAuthStatus() {
+        const storedUser = localStorage.getItem("loggedInUser");
+        const authStatus = document.getElementById("authStatus");
+        if (storedUser) {
+          authStatus.innerText = `Logged in as: ${storedUser}`;
+          document.getElementById("account-link").innerText = `My Account (${storedUser})`;
+        } else {
+          authStatus.innerText = "Not logged in";
+        }
+      }
+      
+      window.onload = updateAuthStatus;
+    </script>
+  </body>
 </html>
