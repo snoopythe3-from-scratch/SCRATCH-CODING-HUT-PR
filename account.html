@@ -31,7 +31,7 @@
         }
     </style>
     <script>
-        async function registerUser() {
+        function registerUser() {
             const username = document.getElementById("username").value.trim();
             const messageBox = document.getElementById("message");
 
@@ -42,31 +42,18 @@
 
             // Base64 encode the redirect URL where Scratch Auth will send the response
             const redirectLocation = btoa(window.location.href); // Redirect back to the current page after authentication
+            
+            // Add specific parameters to the URL to prioritize the "Cloud data" method
+            const authUrl = `https://auth.itinerary.eu.org/auth/?redirect=${redirectLocation}&name=Coding Hut&sign_in_method=cloud`;
 
-            // Request to get the token from Scratch Auth's backend
-            const authUrl = `https://auth-api.itinerary.eu.org/auth/getTokens?redirect=${redirectLocation}&method=cloud&username=${username}`;
+            // Display the instructions to the user
+            messageBox.style.color = "green";
+            messageBox.textContent = `Redirecting to Scratch Auth... Follow the steps there.`;
 
-            try {
-                const response = await fetch(authUrl);
-                const data = await response.json();
-
-                if (data.token) {
-                    // Display the message and redirect user to Scratch Auth
-                    messageBox.style.color = "green";
-                    messageBox.textContent = `Redirecting to Scratch Auth... Follow the steps there.`;
-                    
-                    // Redirect to Scratch Auth after a brief delay
-                    setTimeout(() => {
-                        window.location.href = `https://auth.itinerary.eu.org/auth/?redirect=${redirectLocation}&token=${data.token}`;
-                    }, 2000); // Delay of 2 seconds before redirect
-                } else {
-                    messageBox.style.color = "red";
-                    messageBox.textContent = "Authentication failed. Please try again.";
-                }
-            } catch (error) {
-                messageBox.style.color = "red";
-                messageBox.textContent = "Error connecting to the authentication service. Please try again later.";
-            }
+            // Redirect the user to Scratch Auth after a brief message
+            setTimeout(() => {
+                window.location.href = authUrl;
+            }, 2000);  // Delay the redirect for 2 seconds
         }
     </script>
 </head>
@@ -81,10 +68,10 @@
         <p id="message" class="message"></p>
         <p>
             Please note: You will be redirected to an external site (Scratch Auth) for authentication. Once there, 
-            follow the on-screen instructions to authenticate.
+            choose the "Cloud Data" option for the quickest sign-in method.
         </p>
         <p>
-            If you face issues, try changing your login method.
+            If you are unable to use the "Cloud Data" option, other sign-in methods are available on Scratch Auth's page.
         </p>
     </div>
 </body>
