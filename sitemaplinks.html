@@ -48,7 +48,7 @@
   </div>
 </nav>
   </head>
-  <body><img src="images.png" alt="Edit Image" id="editImage" style="height: 20px; width: 20px;">
+  <body><img src="images.png" alt="Edit Image" id="editImage" style="height: 30px; width: 30px;">
 
     <script>
         // Function to check if the user is logged in and if action=edit is set
@@ -61,7 +61,8 @@
                 if (action === 'edit') {
                     console.log('Edit action detected and user is logged in!');
                     alert('You are in edit mode!');
-                } else {
+                    window.location.href = 'editor.html';
+                    } else {
                     console.log('No edit action found.');
                     alert('No edit action specified.');
                 }
@@ -75,10 +76,18 @@
         const editImage = document.getElementById('editImage');
         editImage.addEventListener('click', handleImageClick);
     </script> 
-<h1><center><b>Wiki | FAQ | More Links</b></center></h1><a href="/sitemaplinks?action=edit"><img src="images.png"></a></img> 
-  <h2>Sorry but this page is still in progress and is Coming Soon</h2>
-  
-We are working hard to work on this page. Check Back Later!</body>
+<h1><center><b>Wiki | FAQ | More Links</b></center></h1>
+    <pre id="display">Loading Wiki...</pre>
+  <script>
+          if (!localStorage.getItem('wiki')) {
+      localStorage.setItem('wiki', 'This is some wiki content!');
+          }
+          if (wiki) {
+        displayElement.textContent = storedMessage; // Sets the element’s content
+      } else {
+        displayElement.textContent = 'No message found in local storage!';
+          }
+</script>
 </html>
 
 <style>
