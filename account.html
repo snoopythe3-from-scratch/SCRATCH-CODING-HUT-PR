@@ -8,16 +8,6 @@
         body {
             font-family: Sans-Serif;
             margin: 0;
-            padding: 0;<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Scratch Auth | Login & Dashboard</title>
-    <style>
-        body {
-            font-family: Sans-Serif;
-            margin: 0;
             padding: 0;
             background-color: #f4f4f4;
             text-align: center;
@@ -107,92 +97,6 @@
         <div class="header"><h1>Welcome to Your Dashboard!</h1></div>
         <div class="content">
             <p>You're successfully logged in.</p>
-            <button onclick="logout()">Logout</button>
-        </div>
-    </div>
-</body>
-</html>
-
-            background-color: #f4f4f4;
-        }
-        .header {
-            background-color: #c04d4d;
-            color: white;
-            text-align: center;
-            padding: 20px;
-        }
-        .content {
-            padding: 20px;
-            text-align: center;
-        }
-        input[type="text"], button {
-            padding: 10px;
-            margin: 10px 0;
-            font-size: 16px;
-            border-radius: 4px;
-        }
-    </style>
-    <script>
-        async function registerUser() {
-            const username = document.getElementById("username").value.trim();
-            if (!username) {
-                alert("Please enter a Scratch username.");
-                return;
-            }
-            
-            const privateKey = Math.random().toString(36).substr(2, 10);
-            localStorage.setItem("privateKey", privateKey);
-            alert(`Post this key on your Scratch profile: ${privateKey}`);
-        }
-
-        async function authenticateUser() {
-            const username = document.getElementById("username").value.trim();
-            const privateKey = localStorage.getItem("privateKey");
-            if (!username || !privateKey) {
-                alert("Make sure you have registered and saved your key.");
-                return;
-            }
-            
-            const response = await fetch(`https://api.scratch.mit.edu/users/${username}/`);
-            const data = await response.json();
-            
-            if (data.profile?.bio.includes(privateKey)) {
-                alert("Authentication successful!");
-                document.getElementById("login").style.display = "none";
-                document.getElementById("dashboard").style.display = "block";
-            } else {
-                alert("Key not found in bio. Make sure you've posted it and try again.");
-            }
-        }
-
-        function logout() {
-            localStorage.removeItem("privateKey");
-            document.getElementById("dashboard").style.display = "none";
-            document.getElementById("login").style.display = "block";
-        }
-    </script>
-</head>
-<body>
-    <div id="login">
-        <div class="header">
-            <h1>Scratch Authentication</h1>
-        </div>
-        <div class="content">
-            <label for="username">Scratch Username:</label>
-            <input type="text" id="username" placeholder="Enter your Scratch username" />
-            <br />
-            <button onclick="registerUser()">Register</button>
-            <br /><br />
-            <button onclick="authenticateUser()">Login with Scratch</button>
-        </div>
-    </div>
-    
-    <div id="dashboard" style="display: none;">
-        <div class="header">
-            <h1>Welcome to Your Dashboard!</h1>
-        </div>
-        <div class="content">
-            <p>You're successfully logged in!</p>
             <button onclick="logout()">Logout</button>
         </div>
     </div>
