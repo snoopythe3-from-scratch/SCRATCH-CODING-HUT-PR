@@ -50,6 +50,19 @@
                 window.location.href = authUrl;
             }, 2000);
         }
+    // Simulate checking if the user is logged in
+    function checkAuth() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const authSuccess = urlParams.get('success'); // Example: Scratch Auth might return '?success=true'
+
+        if (authSuccess === 'true') {
+            // Redirect to index.html if login was successful
+            window.location.href = 'index.html';
+        }
+    }
+
+    // Run this check when the page loads
+    window.onload = checkAuth;
     </script>
 </head>
 <body>
