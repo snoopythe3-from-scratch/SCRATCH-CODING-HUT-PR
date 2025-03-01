@@ -1,144 +1,167 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <style>
-      body {
-        overflow-x: hidden;
-        font-family: Sans-Serif;
-        margin: 0;
-      }
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About Coding Hut | Coding Hut Website</title>
+  <style>
+    body {
+      overflow-x: hidden;
+      font-family: Sans-Serif;
+      margin: 0;
+    }
 
-      .menu-container {
-        position: relative;
-        display: flex;
-        align-items: center;
-        margin-bottom: 20px;
-        background: #c04d4d;
-        color: #ffffff;
-        padding: 20px;
-        z-index: 1;
-        -webkit-user-select: none;
-        user-select: none;
-        box-sizing: border-box;
-      }
+    .menu-container {
+      position: relative;
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+      background: #c04d4d;
+      color: #ffffff;
+      padding: 20px;
+      z-index: 1;
+      -webkit-user-select: none;
+      user-select: none;
+      box-sizing: border-box;
+    }
 
-      .menu-logo {
-        line-height: 0;
-        margin: 0 20px;
-      }
+    .menu-logo {
+      line-height: 0;
+      margin: 0 20px;
+    }
 
-      .menu-logo img {
-        max-height: 40px;
-        max-width: 100px;
-        flex-shrink: 0;
-      }
+    .menu-logo img {
+      max-height: 40px;
+      max-width: 100px;
+      flex-shrink: 0;
+    }
 
-      .menu-container a {
-        text-decoration: none;
-        color: #ffffff;
-        transition: color 0.3s ease;
-      }
+    .menu-container a {
+      text-decoration: none;
+      color: #ffffff;
+      transition: color 0.3s ease;
+    }
 
-      .menu-container a:hover {
-        color: #50e3c2;
-      }
+    .menu-container a:hover {
+      color: #50e3c2;
+    }
 
-      .menu-container input {
-        display: block;
-        width: 35px;
-        height: 25px;
-        position: absolute;
-        cursor: pointer;
-        opacity: 0;
-        z-index: 2;
-      }
+    .menu-container input {
+      display: block;
+      width: 35px;
+      height: 25px;
+      position: absolute;
+      cursor: pointer;
+      opacity: 0;
+      z-index: 2;
+    }
 
-      .menu-container span {
-        display: block;
-        width: 33px;
-        height: 4px;
-        margin-bottom: 5px;
-        background: #ffffff;
-        border-radius: 3px;
-        transition: all 0.5s;
-      }
+    .menu-container span {
+      display: block;
+      width: 33px;
+      height: 4px;
+      margin-bottom: 5px;
+      background: #ffffff;
+      border-radius: 3px;
+      transition: all 0.5s;
+    }
 
+    .menu {
+      display: none;
+      position: absolute;
+      right: 0;
+      top: 60px;
+      background: #ffffff;
+      padding: 20px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .menu ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .menu li {
+      padding: 10px 0;
+    }
+
+    .auth-status {
+      padding: 10px;
+      background: #f4f4f4;
+      text-align: center;
+      font-size: 18px;
+      margin-top: 20px;
+    }
+
+    @media (max-width: 767px) {
       .menu {
-        display: none;
-        position: absolute;
+        width: 100%;
         right: 0;
-        top: 60px;
-        background: #ffffff;
-        padding: 20px;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-      }
-
-      .menu ul {
-        list-style: none;
-        padding: 0;
-      }
-
-      .menu li {
-        padding: 10px 0;
-      }
-
-      .auth-status {
-        padding: 10px;
-        background: #f4f4f4;
         text-align: center;
-        font-size: 18px;
       }
+    }
 
-      @media (max-width: 767px) {
-        .menu {
-          width: 100%;
-          right: 0;
-          text-align: center;
-        }
+    #menu-toggle:checked + span {
+      transform: rotate(45deg);
+    }
+
+    #menu-toggle:checked + span + span {
+      opacity: 0;
+    }
+
+    #menu-toggle:checked + span + span + span {
+      transform: rotate(-45deg);
+    }
+
+    #menu-toggle:checked ~ .menu {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <!-- Navigation Bar -->
+  <nav class="menu-container">
+    <input type="checkbox" id="menu-toggle" />
+    <span></span>
+    <span></span>
+    <span></span>
+    <a href="https://scratch-coding-hut.github.io" class="menu-logo">
+      <img src="https://i.postimg.cc/6qgPbyGH/temp-Image-BJ164c.avif" alt="Coding Hut" />
+    </a>
+    <div class="menu" id="menu">
+      <ul>
+        <li><a href="https://scratch-coding-hut.github.io">Home</a></li>
+        <li><a href="https://scratch-coding-hut.github.io/about">About</a></li>
+        <li><a href="https://scratch.mit.edu/discuss/topic/652178/">Scratch Forum</a></li>
+        <li><a href="https://scratch-coding-hut.github.io/sitemaplinks">More...</a></li>
+        <li><a href="https://scratch-coding-hut.github.io/account" id="account-link">My Account</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Authentication Status -->
+  <div class="auth-status" id="authStatus">Checking login status...</div>
+
+  <!-- Main Content -->
+  <h1><center><b>About Coding Hut</b></center></h1>
+  <h2>Shop Created At Dec. 27, 2022 20:53:31</h2>
+  <p>Coding Hut is a shop that does coding, art, and many more! For more than 3 years, we have been helping Scratchers as well as New Scratchers with lots of Scratch-related things.</p>
+  <p>Coding Hut was founded by @MyScratchedAccount on Dec. 27, 2022 20:53:31.</p>
+
+  <!-- Script for Updating Auth Status -->
+  <script>
+    function updateAuthStatus() {
+      const storedUser = localStorage.getItem("loggedInUser");
+      const authStatus = document.getElementById("authStatus");
+      if (storedUser) {
+        authStatus.innerText = `Logged in as: ${storedUser}`;
+        document.getElementById("account-link").innerText = `My Account (${storedUser})`;
+      } else {
+        authStatus.innerText = "Not logged in";
       }
-    </style>
-    <title>About Coding Hut | Coding Hut Website</title>
-  </head>
-  <body>
-    <nav class="menu-container">
-      <input type="checkbox" id="menu-toggle" />
-      <span></span>
-      <span></span>
-      <span></span>
-      <a href="https://scratch-coding-hut.github.io" class="menu-logo">
-        <img src="https://i.postimg.cc/6qgPbyGH/temp-Image-BJ164c.avif" alt="Coding Hut" />
-      </a>
-      <div class="menu" id="menu">
-        <ul>
-          <li><a href="https://scratch-coding-hut.github.io">Home</a></li>
-          <li><a href="https://scratch-coding-hut.github.io/about">About</a></li>
-          <li><a href="https://scratch.mit.edu/discuss/topic/652178/">Scratch Forum</a></li>
-          <li><a href="https://scratch-coding-hut.github.io/sitemaplinks">More...</a></li>
-          <li><a href="https://scratch-coding-hut.github.io/account" id="account-link">My Account</a></li>
-        </ul>
-      </div>
-    </nav>
+    }
     
-    <div class="auth-status" id="authStatus">Checking login status...</div>
-    
-    <h1><center><b>About Coding Hut</b></center></h1>
-    <h2>Shop Created At Dec. 27, 2022 20:53:31</h2>
-    <p>Coding Hut is a shop that does coding, art, and many more! For more than 3 years, we have been helping Scratchers as well as New Scratchers with lots of Scratch-related things.</p>
-    <p>Coding Hut was founded by @MyScratchedAccount on Dec. 27, 2022 20:53:31.</p>
-    
-    <script>
-      function updateAuthStatus() {
-        const storedUser = localStorage.getItem("loggedInUser");
-        const authStatus = document.getElementById("authStatus");
-        if (storedUser) {
-          authStatus.innerText = `Logged in as: ${storedUser}`;
-          document.getElementById("account-link").innerText = `My Account (${storedUser})`;
-        } else {
-          authStatus.innerText = "Not logged in";
-        }
-      }
-      
-      window.onload = updateAuthStatus;
-    </script>
-  </body>
+    window.onload = updateAuthStatus;
+  </script>
+</body>
 </html>
