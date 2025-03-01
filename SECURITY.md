@@ -1,3 +1,3 @@
 # Security Policy
 
-You can report a vunderbilty by using the Report Vundebilty button on the Secuirty page.
+You can report a vulnerability by using the Report Vulnerability button on the Security page.
