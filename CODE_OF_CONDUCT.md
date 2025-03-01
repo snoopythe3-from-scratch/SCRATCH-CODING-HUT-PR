@@ -103,7 +103,14 @@ private interaction with the people involved, including unsolicited interaction
 with those enforcing the Code of Conduct, is allowed during this period.
 Violating these terms may lead to a permanent ban.
 
-### 4. Permanent Ban
+### 4. Getting Fired
+
+**Community Impact**: A serious violation of community standards, including
+sustained inappropriate behavior, or by getting 5 Strikes in Coding Hut.
+
+**Consequence**: If you have a job at Coding Hut, you will get fired. Otherwise, the perm ban will start. You won't be able to apply for 2 weeks, and can't make an order for the first 4 days of getting fired. 
+
+### 5. Permanent Ban
 
 **Community Impact**: Demonstrating a pattern of violation of community
 standards, including sustained inappropriate behavior,  harassment of an
