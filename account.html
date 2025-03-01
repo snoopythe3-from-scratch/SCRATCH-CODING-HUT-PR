@@ -40,20 +40,15 @@
                 return;
             }
 
-            // Base64 encode the redirect URL where Scratch Auth will send the response
-            const redirectLocation = btoa(window.location.href); // Redirect back to the current page after authentication
-            
-            // Add specific parameters to the URL to prioritize the "Cloud data" method
-            const authUrl = `https://auth.itinerary.eu.org/auth/?redirect=${redirectLocation}&name=Coding Hut&sign_in_method=cloud`;
+            const redirectLocation = encodeURIComponent(window.location.href);
+            const authUrl = `https://auth.itinerary.eu.org/auth/?redirect=${redirectLocation}&name=Coding%20Hut&sign_in_method=cloud`;
 
-            // Display the instructions to the user
             messageBox.style.color = "green";
             messageBox.textContent = `Redirecting to Scratch Auth... Follow the steps there.`;
 
-            // Redirect the user to Scratch Auth after a brief message
             setTimeout(() => {
                 window.location.href = authUrl;
-            }, 2000);  // Delay the redirect for 2 seconds
+            }, 2000);
         }
     </script>
 </head>
