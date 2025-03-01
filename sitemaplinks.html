@@ -48,7 +48,33 @@
   </div>
 </nav>
   </head>
-  <body><a href="/sitemaplinks?action=edit"><img src="images.png" class="edit"></a></img> 
+  <body><img src="images.png" alt="Edit Image" id="editImage" style="height: 20px; width: 20px;">
+
+    <script>
+        // Function to check if the user is logged in and if action=edit is set
+        function handleImageClick() {
+            const isLoggedIn = localStorage.getItem('loggedIn'); // Example: A "loggedIn" flag in localStorage
+            const urlParams = new URLSearchParams(window.location.search);
+            const action = urlParams.get('action');
+
+            if (isLoggedIn === 'true') { // Assuming you set this when the user logs in
+                if (action === 'edit') {
+                    console.log('Edit action detected and user is logged in!');
+                    alert('You are in edit mode!');
+                } else {
+                    console.log('No edit action found.');
+                    alert('No edit action specified.');
+                }
+            } else {
+                console.log('User not logged in — edit action ignored.');
+                alert('You must be logged in to edit.');
+            }
+        }
+
+        // Add click event listener to the image
+        const editImage = document.getElementById('editImage');
+        editImage.addEventListener('click', handleImageClick);
+    </script> 
 <h1><center><b>Wiki | FAQ | More Links</b></center></h1><a href="/sitemaplinks?action=edit"><img src="images.png"></a></img> 
   <h2>Sorry but this page is still in progress and is Coming Soon</h2>
   
