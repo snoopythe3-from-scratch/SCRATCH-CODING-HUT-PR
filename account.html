@@ -57,6 +57,7 @@
 
         if (authSuccess === 'true') {
             // Redirect to index.html if login was successful
+            localStorage.setItem('loggedIn', 'true');
             window.location.href = 'index.html';
         }
     }
