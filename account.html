@@ -1,7 +1,108 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Login | Scratch Auth</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scratch Auth | Login & Dashboard</title>
+    <style>
+        body {
+            font-family: Sans-Serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        .header {
+            background-color: #c04d4d;
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .header h1 {
+            margin: 0;
+        }
+
+        .menu-container {
+            position: relative;
+            display: flex;
+            justify-content: space-between;
+            background: #c04d4d;
+            padding: 20px;
+            color: #fff;
+            box-sizing: border-box;
+        }
+
+        .menu-logo img {
+            max-height: 40px;
+            max-width: 100px;
+        }
+
+        .menu-container a {
+            text-decoration: none;
+            color: #ffffff;
+            transition: color 0.3s ease;
+        }
+
+        .menu-container a:hover {
+            color: #50e3c2;
+        }
+
+        .menu ul {
+            list-style: none;
+            display: flex;
+            padding: 0;
+            margin: 0;
+        }
+
+        .menu li {
+            padding: 0 20px;
+            font-size: 22px;
+        }
+
+        .content {
+            padding: 20px;
+            text-align: center;
+        }
+
+        .logout-btn {
+            background-color: #c04d4d;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 20px;
+        }
+
+        .logout-btn:hover {
+            background-color: #a03b3b;
+        }
+
+        /* Form Styles */
+        input[type="text"] {
+            padding: 10px;
+            margin: 10px 0;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            width: 250px;
+            border-radius: 4px;
+        }
+
+        button {
+            background-color: #50e3c2;
+            color: white;
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+
+        button:hover {
+            background-color: #3ec1a0;
+        }
+    </style>
     <script>
         async function registerUser() {
             const username = document.getElementById("username").value.trim();
@@ -9,13 +110,13 @@
                 alert("Please enter a Scratch username.");
                 return;
             }
-            
+
             const response = await fetch("server.php", {
                 method: "POST",
                 headers: { "Content-Type": "application/x-www-form-urlencoded" },
                 body: `username=${encodeURIComponent(username)}`
             });
-            
+
             const data = await response.json();
             if (data.error) {
                 alert(data.error);
@@ -31,29 +132,66 @@
                 alert("No private key found. Please register first.");
                 return;
             }
-            
+
             const response = await fetch("server.php", {
                 method: "POST",
                 headers: { "Content-Type": "application/x-www-form-urlencoded" },
                 body: `challengeResponse=${btoa(privateKey)}`
             });
-            
+
             const data = await response.json();
             if (data.success) {
                 alert("Authentication successful!");
-                window.location.href = "dashboard.html"; // Redirect if needed
+                window.location.href = "#dashboard"; // Redirect to dashboard
             } else {
                 alert(data.error);
             }
         }
+
+        function logout() {
+            // Clear the private key from local storage
+            localStorage.removeItem("privateKey");
+
+            // Redirect to login page
+            window.location.href = "#login"; // Redirect to login page
+        }
     </script>
 </head>
 <body>
-    <h1>Scratch Authentication</h1>
-    <label>Scratch Username:</label>
-    <input type="text" id="username" placeholder="Enter your Scratch username" />
-    <button onclick="registerUser()">Register</button>
-    <br /><br />
-    <button onclick="authenticateUser()">Login with Key</button>
+    <!-- Login Form -->
+    <div id="login">
+        <div class="header">
+            <h1>Scratch Authentication</h1>
+        </div>
+
+        <div class="content">
+            <label for="username">Scratch Username:</label>
+            <input type="text" id="username" placeholder="Enter your Scratch username" />
+            <br />
+            <button onclick="registerUser()">Register</button>
+            <br /><br />
+            <button onclick="authenticateUser()">Login with Key</button>
+        </div>
+    </div>
+
+    <!-- Dashboard -->
+    <div id="dashboard" style="display: none;">
+        <div class="header">
+            <h1>Welcome to Your Dashboard!</h1>
+        </div>
+
+        <div class="content">
+            <p>You're successfully logged in with your private key. You can now access your personalized settings and manage your account.</p>
+            <button class="logout-btn" onclick="logout()">Logout</button>
+        </div>
+    </div>
+
+    <script>
+        // Check if user is already authenticated
+        if (localStorage.getItem("privateKey")) {
+            document.getElementById("login").style.display = "none";
+            document.getElementById("dashboard").style.display = "block";
+        }
+    </script>
 </body>
 </html>
