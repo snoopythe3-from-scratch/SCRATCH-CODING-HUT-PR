@@ -53,8 +53,9 @@
     // Simulate checking if the user is logged in
     function checkAuth() {
         const urlParams = new URLSearchParams(window.location.search);
-        const authSuccess = urlParams.get('success'); // Example: Scratch Auth might return '?success=true'
-
+        const authSuccess = urlParams.get('success');// Example: Scratch Auth might return '?success=true'
+        const username = params.get('username');
+        
         if (authSuccess === 'true') {
             // Redirect to index.html if login was successful
             localStorage.setItem('loggedIn', 'true');
