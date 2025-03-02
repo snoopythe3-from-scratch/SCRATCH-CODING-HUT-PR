@@ -49,13 +49,160 @@
 </nav>
   </head>
   <body>
-<h1><center><b>Wiki | FAQ | More Links</b></center></h1><a href="https://github.com/Scratch-Coding-Hut/Scratch-Coding-Hut.github.io/edit/main/Wiki/sitemaplinks.html"><img src="images.png" width="50" 
-     height="50"></a></img><a href="https://github.com/Scratch-Coding-Hut/Scratch-Coding-Hut.github.io/new/main/Wiki"><img src="new-wiki-page.png" width="50" 
+<h1><center><b>Wiki | FAQ | More Links</b></center></h1><button onclick=createWikiPage()><img src="images.png" width="50" 
+     height="50"></button></img><a href="https://github.com/Scratch-Coding-Hut/Scratch-Coding-Hut.github.io/new/main/Wiki"><img src="new-wiki-page.png" width="50" 
      height="50"></a></img> <a href="https://github.com/Scratch-Coding-Hut/Scratch-Coding-Hut.github.io/delete/main/Wiki/sitemaplinks.html"><img src="delete-page.png" width="50" 
      height="50"></a></img><a href="https://github.com/Scratch-Coding-Hut/Scratch-Coding-Hut.github.io/commits/main/Wiki/sitemaplinks.html"><img src="history-icon.png" width="50" 
      height="50"></a></img><a href="https://github.com/Scratch-Coding-Hut/Scratch-Coding-Hut.github.io/issues/new?title=Wiki-Homepage"><img src="discuss-icon.png" width="50" 
      height="50"></a></img><a href="https://github.com/Scratch-Coding-Hut/Scratch-Coding-Hut.github.io/blob/main/Wiki/sitemaplinks.html"><img src="plain-text.png" width="50" 
      height="50"></a></img>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    #wikiForm {
+      width: 80%;
+      max-width: 800px;
+      margin-bottom: 20px;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 10px;
+      font-size: 18px;
+      margin-bottom: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    textarea {
+      width: 100%;
+      height: 200px;
+      padding: 10px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    li a {
+      color: #007BFF;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    li a:hover {
+      text-decoration: underline;
+    }
+
+    #wikiPageView {
+      width: 80%;
+      max-width: 800px;
+      margin-top: 20px;
+      padding: 20px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      background: #f9f9f9;
+    }
+  </style>
+  <h1>Advanced Wiki Creator</h1>
+
+  <div id="wikiForm">
+    <input type="text" id="pageTitle" placeholder="Enter page title">
+    <textarea id="pageContent" placeholder="Write your HTML, CSS, and JS here"></textarea>
+  </div>
+
+  <h2>Saved Pages:</h2>
+  <ul id="wikiPages"></ul>
+      
+  <div id="wikiPageView" style="display: none;">
+    <h2 id="viewTitle"></h2>
+    <iframe id="viewContent" style="width: 100%; height: 300px; border: none;"></iframe>
+    <button onclick="closePageView()">Close Page</button>
+  </div>
+
+  <script>
+    function createWikiPage() {
+      const title = document.getElementById('pageTitle').value;
+      const content = document.getElementById('pageContent').value;
+
+      if (!title || !content) {
+        alert('Please enter both a title and content.');
+        return;
+      }
+
+      const page = { title, content };
+      localStorage.setItem(title, JSON.stringify(page));
+
+      displayWikiPages();
+      alert(`Page "${title}" created!`);
+
+      // Clear inputs
+      document.getElementById('pageTitle').value = '';
+      document.getElementById('pageContent').value = '';
+    }
+
+    function displayWikiPages() {
+      const wikiPages = document.getElementById('wikiPages');
+      wikiPages.innerHTML = '';
+
+      for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        const page = JSON.parse(localStorage.getItem(key));
+
+        const listItem = document.createElement('li');
+        listItem.innerHTML = `<a href="#" onclick="viewWikiPage('${page.title}')">${page.title}</a>`;
+        wikiPages.appendChild(listItem);
+      }
+    }
+
+    function viewWikiPage(title) {
+      const page = JSON.parse(localStorage.getItem(title));
+
+      if (page) {
+        document.getElementById('viewTitle').textContent = page.title;
+
+        const iframe = document.getElementById('viewContent');
+        const doc = iframe.contentDocument || iframe.contentWindow.document;
+
+        doc.open();
+        doc.write(page.content); // This lets you write HTML, CSS, and JS directly
+        doc.close();
+
+        document.getElementById('wikiPageView').style.display = 'block';
+      }
+    }
+
+    function closePageView() {
+      document.getElementById('wikiPageView').style.display = 'none';
+    }
+
+    // Display saved pages on load
+    window.onload = displayWikiPages;
+  </script>
   <h2>Wiki Homepage</h2>
   
 Welcome to the wiki! The wiki is a place where we share Coding Hut knowledge and link to pages not shown in the header. It's also a useful source.
