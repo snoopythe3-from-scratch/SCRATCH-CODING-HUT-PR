@@ -145,13 +145,8 @@
       // Get the content element by its ID
       const content = document.getElementById("wikiForm");
 
-      // Check the current display style and toggle between "none" and "block"
-      if (content.style.display === "none" || content.style.display === "") {
-        content.style.display = "block"; // Show the content
-      } else {
-        content.style.display = "none"; // Hide the content
-      }
-  
+      content.style.display = "none"; // Hide the content
+
 
   </script>
   <script>
@@ -162,7 +157,6 @@
       const username = localStorage.getItem('username');
       // Get the content element by its ID
       const content = document.getElementById("wikiForm");
-
       // Change its display style to "block" to make it visible
       content.style.display = "block";
       if (!title || !content) {
