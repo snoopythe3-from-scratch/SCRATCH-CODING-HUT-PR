@@ -49,9 +49,8 @@
 </nav>
   </head>
   <body>
-<h1><center><b>Wiki | FAQ | More Links</b></center></h1><button onclick=createWikiPage()><img src="images.png" width="50" 
-     height="50"></button></img><a href="https://github.com/Scratch-Coding-Hut/Scratch-Coding-Hut.github.io/new/main/Wiki"><img src="new-wiki-page.png" width="50" 
-     height="50"></a></img> <a href="https://github.com/Scratch-Coding-Hut/Scratch-Coding-Hut.github.io/delete/main/Wiki/sitemaplinks.html"><img src="delete-page.png" width="50" 
+<h1><center><b>Wiki | FAQ | More Links</b></center></h1><button onclick=createWikiPage()><img src="new-wiki-page.png" width="50" 
+     height="50"></button></img> <a href="https://github.com/Scratch-Coding-Hut/Scratch-Coding-Hut.github.io/delete/main/Wiki/sitemaplinks.html"><img src="delete-page.png" width="50" 
      height="50"></a></img><a href="https://github.com/Scratch-Coding-Hut/Scratch-Coding-Hut.github.io/commits/main/Wiki/sitemaplinks.html"><img src="history-icon.png" width="50" 
      height="50"></a></img><a href="https://github.com/Scratch-Coding-Hut/Scratch-Coding-Hut.github.io/issues/new?title=Wiki-Homepage"><img src="discuss-icon.png" width="50" 
      height="50"></a></img><a href="https://github.com/Scratch-Coding-Hut/Scratch-Coding-Hut.github.io/blob/main/Wiki/sitemaplinks.html"><img src="plain-text.png" width="50" 
@@ -128,7 +127,6 @@
       background: #f9f9f9;
     }
   </style>
-  <h1>Advanced Wiki Creator</h1>
 
   <div id="wikiForm">
     <input type="text" id="pageTitle" placeholder="Enter page title">
@@ -145,9 +143,11 @@
   </div>
 
   <script>
+
     function createWikiPage() {
       const title = document.getElementById('pageTitle').value;
       const content = document.getElementById('pageContent').value;
+      const username = localStorage.getItem('username');
 
       if (!title || !content) {
         alert('Please enter both a title and content.');
@@ -156,9 +156,11 @@
 
       const page = { title, content };
       localStorage.setItem(title, JSON.stringify(page));
+      localStorage.setItem('history', '${username} created a new topic, ${title}')
 
       displayWikiPages();
       alert(`Page "${title}" created!`);
+      
 
       // Clear inputs
       document.getElementById('pageTitle').value = '';
@@ -199,19 +201,14 @@
     function closePageView() {
       document.getElementById('wikiPageView').style.display = 'none';
     }
-
     // Display saved pages on load
     window.onload = displayWikiPages;
   </script>
   <h2>Wiki Homepage</h2>
   
 Welcome to the wiki! The wiki is a place where we share Coding Hut knowledge and link to pages not shown in the header. It's also a useful source.
-It's powered by Github, so you can use your Github account and edit the wiki as well. If you don't get direct edit access from me, that is OK! You can still send a pull request.
+It's powered by localStorage and can be edited or new pages can be made.
   
-But now let's move onto the content.
-  
-<h2>List Of Wiki Pages,</h2>
-None yet. Stay tuned! If you make one please list it here as well.</body>
 </html>
 
 <style>body {
