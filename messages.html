@@ -17,6 +17,39 @@
   color: white;
   font-size: 30px;
 }
+
+.badge {
+  background-color: red;
+  color: white;
+  padding: 4px 8px;
+  text-align: center;
+  border-radius: 5px;
+}
+      
+      /* The alert message box */
+.alert {
+  padding: 20px;
+  background-color: #f44336; /* Red */
+  color: white;
+  margin-bottom: 15px;
+}
+
+/* The close button */
+.closebtn {
+  margin-left: 15px;
+  color: white;
+  font-weight: bold;
+  float: right;
+  font-size: 22px;
+  line-height: 20px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+/* When moving the mouse over the close button */
+.closebtn:hover {
+  color: black;
+}
       
       .menu-container {
         position: relative;
@@ -190,13 +223,19 @@
 <!-- The actual snackbar -->
 <div id="snackbar">This feature is Coming Soon!</div>
 
-<h3>Alerts From Coding Hut</h3>
+<h3>Alerts From Coding Hut <span class="badge">1 Alert</span></h3>
 
 <h4>Higher Priority Alerts</h4>
 <center><h3>You currently don't have any alerts. Check back later!</h3></center>
 
 <h4>Lower Priority Alerts</h4>
 <center><h3>You currently don't have any alerts. Check back later!</h3></center>
+
+<h4>Lowest Priority Alerts <span class="badge">1 Alert</span></h4>
+<div class="alert">
+  <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+  Welcome to Coding Hut! Try signing in, making orders, becoming staff and more! We are glad you joined us.
+</div>
 
 <h3>Messages</h3>
 <center><h2>You currently don't have any messages. Check back later!</h2></center>
