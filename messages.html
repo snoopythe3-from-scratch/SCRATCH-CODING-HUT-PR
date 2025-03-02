@@ -254,8 +254,14 @@ function myFunction() {
 
   // After 3 seconds, remove the show class from DIV
   setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
+  window.location.href = /message_person.html;
 }
-      const messages = localstorage.getItem('HPA') 
+      const messagesHPA = localstorage.getItem('HPA');
+      document.getElemantById('HPA') = messagesHPA;
+      const messagesNPA = localstorage.getItem('NPA');
+      document.getElemantById('HPA') = messagesNPA;
+      const messagesLPA = localstorage.getItem('LPA'); 
+      document.getElemantById('LPA') = messagesLPA;
     </script>
   </body>
 </html>
