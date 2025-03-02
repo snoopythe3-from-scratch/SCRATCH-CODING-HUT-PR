@@ -48,55 +48,14 @@
   </div>
 </nav>
   </head>
-  <body><img src="images.png" alt="Edit Image" id="editImage" style="height: 30px; width: 30px;">
-
-    <script>
-        // Function to check if the user is logged in and if action=edit is set
-        function handleImageClick() {
-            const isLoggedIn = localStorage.getItem('loggedIn'); // Example: A "loggedIn" flag in localStorage
-            const urlParams = new URLSearchParams(window.location.search);
-            const action = urlParams.get('action');
-
-            if (isLoggedIn === 'true') { // Assuming you set this when the user logs in
-                if (action === 'edit') {
-                    console.log('Edit action detected and user is logged in!');
-                    alert('You are in edit mode!');
-                    window.location.href = 'editor.html';
-                    } else {
-                    console.log('No edit action found.');
-                    alert('No edit action specified.');
-                }
-            } else {
-                console.log('User not logged in — edit action ignored.');
-                alert('You must be logged in to edit.');
-            }
-        }
-
-        // Add click event listener to the image
-        const editImage = document.getElementById('editImage');
-        editImage.addEventListener('click', handleImageClick);
-    </script> 
-<h1><center><b>Wiki | FAQ | More Links</b></center></h1>
-    <pre id="display">Loading Wiki...</pre>
-  <script>
-          if (!localStorage.getItem('wiki')) {
-      localStorage.setItem('wiki', 'This is some wiki content!');
-          }
-          if (wiki) {
-        displayElement.textContent = storedMessage; // Sets the element’s content
-      } else {
-        displayElement.textContent = 'No message found in local storage!';
-          }
-</script>
+  <body>
+<h1><center><b>Wiki | FAQ | More Links</b></center></h1><a href="/sitemaplinks?action=edit"><img src="images.png"></a></img> 
+  <h2>Sorry but this page is still in progress and is Coming Soon</h2>
+  
+We are working hard to work on this page. Check Back Later!</body>
 </html>
 
-<style>
-  .logo {
-width: 20px;
-height: 20px;
-  }
-  
-  body {
+<style>body {
   overflow-x: hidden;
   font-family: Sans-Serif;
   margin: 0;
