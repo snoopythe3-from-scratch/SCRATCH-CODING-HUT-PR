@@ -49,6 +49,8 @@
         function checkAuth() {
             const urlParams = new URLSearchParams(window.location.search);
             const authSuccess = urlParams.get('success'); // Example: Scratch Auth might return '?success=true'
+            const username = urlParams.get('username')
+            localStorage.setItem('username', username)
             
             if (authSuccess === 'true') {
                 // Redirect to index.html if login was successful
