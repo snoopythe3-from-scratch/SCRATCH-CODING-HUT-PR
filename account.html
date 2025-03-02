@@ -24,7 +24,7 @@
             color: red;
             font-weight: bold;
         }
-        input, button {
+        button {
             padding: 10px;
             margin: 10px;
             font-size: 16px;
@@ -32,13 +32,7 @@
     </style>
     <script>
         function registerUser() {
-            const username = document.getElementById("username").value.trim();
             const messageBox = document.getElementById("message");
-
-            if (!username) {
-                messageBox.textContent = "Please enter a Scratch username.";
-                return;
-            }
 
             const redirectLocation = encodeURIComponent(window.location.href);
             const authUrl = `https://auth.itinerary.eu.org/auth/?redirect=${redirectLocation}&name=Coding%20Hut&sign_in_method=cloud`;
@@ -50,30 +44,27 @@
                 window.location.href = authUrl;
             }, 2000);
         }
-    // Simulate checking if the user is logged in
-    function checkAuth() {
-        const urlParams = new URLSearchParams(window.location.search);
-        const authSuccess = urlParams.get('success');// Example: Scratch Auth might return '?success=true'
-        const username = params.get('username');
-        
-        if (authSuccess === 'true') {
-            // Redirect to index.html if login was successful
-            localStorage.setItem('loggedIn', 'true');
-            window.location.href = 'index.html';
-        }
-    }
 
-    // Run this check when the page loads
-    window.onload = checkAuth;
+        // Simulate checking if the user is logged in
+        function checkAuth() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const authSuccess = urlParams.get('success'); // Example: Scratch Auth might return '?success=true'
+            
+            if (authSuccess === 'true') {
+                // Redirect to index.html if login was successful
+                localStorage.setItem('loggedIn', 'true');
+                window.location.href = 'index.html';
+            }
+        }
+
+        // Run this check when the page loads
+        window.onload = checkAuth;
     </script>
 </head>
 <body>
     <div class="header"><h1>Scratch Authentication</h1></div>
     <div class="content">
         <h2>Welcome! Please log in to continue.</h2>
-        <label for="username">Scratch Username:</label>
-        <input type="text" id="username" placeholder="Enter your Scratch username" />
-        <br />
         <button onclick="registerUser()">Register</button>
         <p id="message" class="message"></p>
         <p>
