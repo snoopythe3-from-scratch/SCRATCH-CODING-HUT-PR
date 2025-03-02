@@ -1,6 +1,6 @@
 <html>
   <head>
-   <title>Sitemap Links | Coding Hut Website</title>
+   <title>Wiki | FAQ | Links | Coding Hut Website</title>
     
 <nav class="menu-container">
   <!-- burger menu -->
@@ -193,7 +193,10 @@
 
     function viewWikiPage(title) {
       const page = JSON.parse(localStorage.getItem(title));
+            const content = document.getElementById("wikiForm");
 
+      // Change its display style to "block" to make it visible
+      content.style.display = "none";
       if (page) {
         document.getElementById('viewTitle').textContent = page.title;
 
