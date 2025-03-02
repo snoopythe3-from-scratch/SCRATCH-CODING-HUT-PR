@@ -261,14 +261,7 @@ body {
     window.onload = displayWikiPages;
 
 function deleteAll() {
-const localWikis = wikiPages;
-
-  // Loop through the array and remove each item from localStorage
-  localWikis.forEach(localWiki => {
-    localStorage.removeItem(localWiki); // Assuming the list item name matches the localStorage key
-  });
-  // Clear the array
-  localWikis.length = 0;
+localStorage.clear();
 } 
 
   </script>
