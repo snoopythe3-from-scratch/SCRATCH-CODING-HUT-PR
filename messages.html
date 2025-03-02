@@ -223,8 +223,31 @@
 <!-- The actual snackbar -->
 <div id="snackbar">This feature is Coming Soon!</div>
 
-<h3>Messages<span id="alerts" class="badge">Loading...</span></h3>
+<h3>Alerts From Coding Hut <span class="badge">1 Alert</span></h3>
 
+<h4>Higher Priority Alerts</h4>
+<center><h3>You currently don't have any alerts. Check back later!</h3></center>
+
+<h4>Normal Priority Alerts</h4>
+<center><h3>You currently don't have any alerts. Check back later!</h3></center>
+
+<h4>Lower Priority Alerts</h4>
+<center><h3>You currently don't have any alerts. Check back later!</h3></center>
+
+<h4>Lowest Priority Alerts <span class="badge">1 Alert</span></h4>
+<div class="alert">
+  <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+  Welcome to Coding Hut! Try signing in, making orders, becoming staff and more! We are glad you joined us.
+</div>
+
+<h3>Messages</h3>
+
+<h4>High Priority Messages</h4>
+<center><h2>You currently don't have any messages. Check back later!</h2></center>
+
+<h4>Normal Priority Messages</h4>
+<center><h2>You currently don't have any messages. Check back later!</h2></center>
+    
     <script>
       function toggleMenu() {
         var menu = document.querySelector('.menu');
@@ -239,36 +262,7 @@ function myFunction() {
 
   // After 3 seconds, remove the show class from DIV
   setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
-  window.location.href = "message_person.html";
-
 }
-window.onload = function {
-  getMessagesForRecipient();
-};
-              window.onload = function() {
-            const message = localStorage.getItem('username') || 'No message found.';
-            document.getElementById('getRecipient').textContent = message;
-        };
-      
-        function getMessagesForRecipient() {
-            const recipient = document.getElementById('getRecipient').value;
-            const userMessages = JSON.parse(localStorage.getItem(recipient)) || [];
-            const messagesDisplay = document.getElementById('messagesDisplay');
-
-            messagesDisplay.innerHTML = '';
-
-            if (userMessages.length > 0) {
-                userMessages.forEach(message => {
-                    const listItem = document.createElement('li');
-                    listItem.textContent = message;
-                    messagesDisplay.appendChild(listItem);
-                });
-            } else {
-                const noMessagesItem = document.createElement('li');
-                noMessagesItem.textContent = `No messages found for ${recipient}.`;
-                messagesDisplay.appendChild(noMessagesItem);
-            }
-        }
     </script>
   </body>
 </html>
