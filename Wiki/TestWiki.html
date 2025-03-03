@@ -1,21 +1,19 @@
+/* Frontend HTML (index.html) */
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Wiki | Coding Hut</title>
+    <title>Wiki Pages</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="container">
-        <nav class="menu-container">
-            <h1>Wiki Homepage</h1>
-            <button onclick="createWiki()">➕ New Wiki Page</button>
-        </nav>
+    <h1>Wiki Pages</h1>
+    <ul id="wiki-list"></ul>
 
-        <ul id="wiki-list"></ul>
-        <div id="wiki-viewer"></div>
-    </div>
+    <h2>Add or Edit a Wiki Page</h2>
+    <input type="text" id="title" placeholder="Title" />
+    <textarea id="content" placeholder="Content"></textarea>
+    <button onclick="addOrEditWiki()">Save Wiki</button>
 
     <script src="script.js"></script>
 </body>
