@@ -1,0 +1,10 @@
+[
+    {
+        "title": "Sample Wiki 1",
+        "content": "<h2>Content of Wiki 1</h2><p>This is a sample wiki page.</p>"
+    },
+    {
+        "title": "Sample Wiki 2",
+        "content": "<h2>Content of Wiki 2</h2><p>This is another wiki page.</p>"
+    }
+]
