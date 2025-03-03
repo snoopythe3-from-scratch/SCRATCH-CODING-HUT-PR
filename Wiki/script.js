@@ -1,40 +1,48 @@
 // DO NOT DELETE OR EDIT
-// Fetch and display wikis from a static JSON file hosted on GitHub
-function fetchWikis() {
+/* Frontend JS (script.js) */
+const API_URL = 'https://your-railway-app-name.up.railway.app/api/wikis';
+
+async function fetchWikis() {
+    const res = await fetch(API_URL);
+    const wikis = await res.json();
     const wikiList = document.getElementById('wiki-list');
     wikiList.innerHTML = '';
 
-    fetch('https://raw.githubusercontent.com/scratch-coding-hut/Scratch-Coding-Hut.github.io/main/Wiki/wikis.json')
-        .then(response => response.json())
-        .then(wikis => {
-            wikis.forEach((wiki, index) => {
-                const li = document.createElement('li');
-                li.innerHTML = `
-                    <strong>${wiki.title}</strong>
-                    <button onclick="viewWiki(${index})">📝 View</button>
-                `;
-                wikiList.appendChild(li);
-            });
-        })
-        .catch(error => {
-            console.error('Error loading wikis:', error);
-            wikiList.innerHTML = 'Error loading wikis.';
-        });
-}
-
-// View a specific wiki’s content
-function viewWiki(index) {
-    fetch('https://raw.githubusercontent.com/scratch-coding-hut/Scratch-Coding-Hut.github.io/main/Wiki/wikis.json')
-        .then(response => response.json())
-        .then(wikis => {
-            const wiki = wikis[index];
-            const viewer = document.getElementById('wiki-viewer');
-            viewer.innerHTML = `
-                <h2>${wiki.title}</h2>
+    wikis.forEach(wiki => {
+        const li = document.createElement('li');
+        li.innerHTML = `
+            <div>
+                <h3>${wiki.title}</h3>
                 <div>${wiki.content}</div>
-            `;
-        });
+            </div>
+            <button onclick="editWiki('${wiki.title}', '${wiki.content}')">Edit</button>
+            <button onclick="deleteWiki('${wiki.title}')">Delete</button>
+        `;
+        wikiList.appendChild(li);
+    });
 }
 
-// Call fetchWikis when the page loads
-window.onload = fetchWikis;
+async function addOrEditWiki() {
+    const title = document.getElementById('title').value;
+    const content = document.getElementById('content').value;
+
+    const res = await fetch(`${API_URL}/${title}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ title, content })
+    });
+
+    if (res.ok) fetchWikis();
+}
+
+async function editWiki(title, content) {
+    document.getElementById('title').value = title;
+    document.getElementById('content').value = content;
+}
+
+async function deleteWiki(title) {
+    const res = await fetch(`${API_URL}/${title}`, { method: 'DELETE' });
+    if (res.ok) fetchWikis();
+}
+
+fetchWikis();
