@@ -4,7 +4,7 @@ function fetchWikis() {
     const wikiList = document.getElementById('wiki-list');
     wikiList.innerHTML = '';
 
-    fetch('https://raw.githubusercontent.com/scratch-coding-hut/Scratch-Coding-Hut.github.io/main/wikis.json')
+    fetch('https://raw.githubusercontent.com/scratch-coding-hut/Scratch-Coding-Hut.github.io/main/Wiki/wikis.json')
         .then(response => response.json())
         .then(wikis => {
             wikis.forEach((wiki, index) => {
@@ -24,7 +24,7 @@ function fetchWikis() {
 
 // View a specific wiki’s content
 function viewWiki(index) {
-    fetch('https://raw.githubusercontent.com/scratch-coding-hut/Scratch-Coding-Hut.github.io/main/wikis.json')
+    fetch('https://raw.githubusercontent.com/scratch-coding-hut/Scratch-Coding-Hut.github.io/main/Wiki/wikis.json')
         .then(response => response.json())
         .then(wikis => {
             const wiki = wikis[index];
