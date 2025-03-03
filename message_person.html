@@ -1,222 +1,115 @@
 <!DOCTYPE html>
 <html>
-  <head>
+<head>
     <title>Send Messages | Coding Hut Website</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
-      body {
-        overflow-x: hidden;
-        font-family: Sans-Serif;
-        margin: 0;
-      }
-
-.header {
-  padding: 60px;
-  text-align: center;
-  background: #1abc9c;
-  color: white;
-  font-size: 30px;
-}
-
-.badge {
-  background-color: red;
-  color: white;
-  padding: 4px 8px;
-  text-align: center;
-  border-radius: 5px;
-}
-      
-      /* The alert message box */
-.alert {
-  padding: 20px;
-  background-color: #f44336; /* Red */
-  color: white;
-  margin-bottom: 15px;
-}
-
-/* The close button */
-.closebtn {
-  margin-left: 15px;
-  color: white;
-  font-weight: bold;
-  float: right;
-  font-size: 22px;
-  line-height: 20px;
-  cursor: pointer;
-  transition: 0.3s;
-}
-
-/* When moving the mouse over the close button */
-.closebtn:hover {
-  color: black;
-}
-      
-      .menu-container {
-        position: relative;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        background: #c04d4d;
-        padding: 20px;
-        z-index: 1;
-        user-select: none;
-        box-sizing: border-box;
-      }
-
-      /* The snackbar - position it at the bottom and in the middle of the screen */
-#snackbar {
-  visibility: hidden; /* Hidden by default. Visible on click */
-  min-width: 250px; /* Set a default minimum width */
-  margin-left: -125px; /* Divide value of min-width by 2 */
-  background-color: #333; /* Black background color */
-  color: #fff; /* White text color */
-  text-align: center; /* Centered text */
-  border-radius: 2px; /* Rounded borders */
-  padding: 16px; /* Padding */
-  position: fixed; /* Sit on top of the screen */
-  z-index: 1; /* Add a z-index if needed */
-  left: 50%; /* Center the snackbar */
-  bottom: 30px; /* 30px from the bottom */
-}
-
-/* Show the snackbar when clicking on a button (class added with JavaScript) */
-#snackbar.show {
-  visibility: visible; /* Show the snackbar */
-  /* Add animation: Take 0.5 seconds to fade in and out the snackbar.
-  However, delay the fade out process for 2.5 seconds */
-  -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
-  animation: fadein 0.5s, fadeout 0.5s 2.5s;
-}
-
-/* Animations to fade the snackbar in and out */
-@-webkit-keyframes fadein {
-  from {bottom: 0; opacity: 0;}
-  to {bottom: 30px; opacity: 1;}
-}
-
-@keyframes fadein {
-  from {bottom: 0; opacity: 0;}
-  to {bottom: 30px; opacity: 1;}
-}
-
-@-webkit-keyframes fadeout {
-  from {bottom: 30px; opacity: 1;}
-  to {bottom: 0; opacity: 0;}
-}
-
-@keyframes fadeout {
-  from {bottom: 30px; opacity: 1;}
-  to {bottom: 0; opacity: 0;}
-}
-
-      .menu-logo img {
-        max-height: 40px;
-        max-width: 100px;
-        flex-shrink: 0;
-      }
-
-      .menu-container a {
-        text-decoration: none;
-        color: #ffffff;
-        transition: color 0.3s ease;
-      }
-
-      .menu-container a:hover {
-        color: #50e3c2;
-      }
-
-      .menu ul {
-        list-style: none;
-        display: flex;
-        padding: 0;
-        margin: 0;
-      }
-
-      .menu li {
-        padding: 0 20px;
-        font-size: 22px;
-      }
-
-      /* Mobile Styles */
-      @media only screen and (max-width: 767px) {
-        .menu-container {
-          flex-direction: column;
-          align-items: flex-start;
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #ffffff;
+            color: #333;
         }
 
-        .menu-logo {
-          margin-bottom: 10px;
+        .header {
+            padding: 60px;
+            text-align: center;
+            background: #c04d4d;
+            color: white;
+            font-size: 30px;
         }
 
-        .menu {
-          display: none;
-          width: 100%;
-          flex-direction: column;
+        .container {
+            max-width: 500px;
+            margin: 40px auto;
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
 
-        .menu ul {
-          flex-direction: column;
-          width: 100%;
+        label {
+            font-weight: bold;
+            display: block;
+            margin-top: 10px;
         }
 
-        .menu li {
-          padding: 10px 0;
-          text-align: center;
+        input {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+            color: #333;
         }
 
-        /* Menu button */
-        .hamburger {
-          display: block;
-          font-size: 30px;
-          cursor: pointer;
-        }
-      }
-
-      /* Desktop Styles */
-      @media only screen and (min-width: 768px) {
-        .menu {
-          display: flex;
-          justify-content: space-between;
-          width: 100%;
+        button {
+            width: 100%;
+            padding: 10px;
+            margin-top: 15px;
+            background: #c04d4d;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 18px;
+            cursor: pointer;
+            transition: background 0.3s;
         }
 
-        .hamburger {
-          display: none;
+        button:hover {
+            background: #a03d3d;
         }
-      }
+
+        /* Snackbar */
+        #snackbar {
+            visibility: hidden;
+            min-width: 250px;
+            background-color: #333;
+            color: white;
+            text-align: center;
+            border-radius: 5px;
+            padding: 16px;
+            position: fixed;
+            left: 50%;
+            bottom: 30px;
+            transform: translateX(-50%);
+            font-size: 16px;
+        }
+
+        #snackbar.show {
+            visibility: visible;
+            animation: fadein 0.5s, fadeout 0.5s 2.5s;
+        }
+
+        @keyframes fadein {
+            from { bottom: 0; opacity: 0; }
+            to { bottom: 30px; opacity: 1; }
+        }
+
+        @keyframes fadeout {
+            from { bottom: 30px; opacity: 1; }
+            to { bottom: 0; opacity: 0; }
+        }
     </style>
-  </head>
-  <body>
-    <nav class="menu-container">
-      <!-- Logo -->
-      <a href="https://scratch-coding-hut.github.io" class="menu-logo">
-        <img src="https://i.postimg.cc/6qgPbyGH/temp-Image-BJ164c.avif" alt="Coding Hut Logo"/>
-      </a></img>
+</head>
+<body>
+    <div class="header">Send Messages</div>
+    
+    <div class="container">
+        <form id="messageForm" onsubmit="saveMessageToLocalStorage(event)">
+            <label for="recipient">Send to:</label>
+            <input type="text" id="recipient" name="recipient" required>
 
-      <!-- Menu Items -->
-      <div class="menu">
-        <ul>
-          <li><a href="https://scratch-coding-hut.github.io">Home</a></li>
-          <li><a href="https://scratch-coding-hut.github.io/about">About</a></li>
-          <li><a href="https://scratch.mit.edu/discuss/topic/652178/">Scratch Forum</a></li>
-          <li><a href="https://scratch-coding-hut.github.io/Wiki/sitemaplinks">Wiki | FAQ | More Links</a></li>
-        </ul>
-        <ul>
-          <li><a href="https://scratch-coding-hut.github.io/account">My Account</a></li>
-        </ul>
-      </div>
-    </nav>
-    <body>
-     <center> <h2>Send Messages</h2>
-          <form id="messageForm" onsubmit="saveMessageToLocalStorage(event)">
-        <label for="recipient">Send to:</label>
-        <input type="text" id="recipient" name="recipient" required>
+            <label for="message">Message:</label>
+            <input type="text" id="message" name="message" required>
 
-        <label for="message">Message:</label>
-        <input type="text" id="message" name="message" required>
+            <button type="submit">Send Message</button>
+        </form>
+    </div>
 
-        <button type="submit">Send Message</button>
-    </form></center>
+    <div id="snackbar">Message sent!</div>
 
     <script>
         function saveMessageToLocalStorage(event) {
@@ -229,6 +122,15 @@
             localStorage.setItem(recipient, JSON.stringify(userMessages));
 
             document.getElementById('messageForm').reset();
-            alert(`Message sent to ${recipient}!`);
+            showSnackbar(`Message sent to ${recipient}!`);
+        }
+
+        function showSnackbar(message) {
+            const snackbar = document.getElementById("snackbar");
+            snackbar.textContent = message;
+            snackbar.classList.add("show");
+            setTimeout(() => snackbar.classList.remove("show"), 3000);
         }
     </script>
+</body>
+</html>
