@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Wiki | Coding Hut</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <nav class="menu-container">
+    <h1>Wiki Homepage</h1>
+    <button onclick="createWiki()">➕ New Wiki Page</button>
+  </nav>
+
+  <ul id="wiki-list"></ul>
+  <div id="wiki-viewer"></div>
+
+  <!-- Firebase SDK -->
+  <script type="module" src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js"></script>
+  <script type="module" src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js"></script>
+
+  <script type="module" src="script.js"></script>
+</body>
+</html>
