@@ -1,0 +1,7 @@
+{
+"bannedusers":[
+  {"username":"BANNEDUSER1", "reason":""},
+  {"username":"BANNEDUSER2", "reason":""},
+  {"username":"BANNEDUSER3", "reason":""}
+]
+}
