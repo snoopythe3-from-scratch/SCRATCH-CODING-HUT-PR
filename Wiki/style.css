@@ -1,46 +1,6 @@
-body {
-    font-family: Arial, sans-serif;
-    background: #f4f4f4;
-    margin: 0;
-}
-
-.container {
-    padding: 20px;
-}
-
-.menu-container {
-    background: #c04d4d;
-    color: white;
-    text-align: center;
-    padding: 10px;
-}
-
-ul {
-    list-style: none;
-    padding: 0;
-}
-
-li {
-    background: white;
-    margin: 10px;
-    padding: 10px;
-    display: flex;
-    justify-content: space-between;
-}
-
-button {
-    background: #50e3c2;
-    border: none;
-    padding: 5px 10px;
-    cursor: pointer;
-}
-
-button:hover {
-    background: #4ad0a8;
-}
-
-#wiki-viewer {
-    background: white;
-    margin: 20px;
-    padding: 20px;
-}
+/* CSS Styles (style.css) */
+body { font-family: Arial, sans-serif; background: #f4f4f4; }
+h1 { text-align: center; }
+ul { list-style: none; padding: 0; }
+li { background: white; margin: 10px; padding: 10px; display: flex; justify-content: space-between; }
+textarea { width: 100%; height: 100px; }
