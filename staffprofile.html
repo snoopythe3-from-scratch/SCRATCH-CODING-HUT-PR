@@ -1,0 +1,71 @@
+<html>
+<head>
+<title>Staff Profile | Coding Hut</title>
+</head>
+<body>	
+<!-- This is the staff profile system -->
+<h1>Staff Profile</h1>
+
+<!-- Default Dynamic Section -->
+<div id="default-content" class="dynamic-content">
+<h2>No staff profile selected</h2>
+</div>
+<!-- Dynamic Section 1 -->
+<div id="myscratchedaccount" class="dynamic-content">
+<h2>MyScratchedAccount</h2>
+</div>
+<!-- Dynamic Section 2 -->
+<div id="staff2" class="dynamic-content">
+<h2>Staff2</h2>
+</div>
+<!-- Dynamic Section 3 -->
+<div id="staff3" class="dynamic-content">
+<h2>Staff3</h2>
+</div>
+
+If you want to appeal please use the appeal form or contact MyScratchedAccount on Scratch.
+	
+</body>
+</html>
+
+<style>
+.dynamic-content {
+    display:none;
+}
+</style>
+
+<script src="//code.jquery.com/jquery-1.12.0.min.js"></script>
+<script type="text/javascript">
+	// Parse the URL parameter
+	function getParameterByName(name, url) {
+	    if (!url) url = window.location.href;
+	    name = name.replace(/[\[\]]/g, "\\$&");
+	    var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+	        results = regex.exec(url);
+	    if (!results) return null;
+	    if (!results[2]) return '';
+	    return decodeURIComponent(results[2].replace(/\+/g, " "));
+	}
+	// Give the parameter a variable name
+	var dynamicContent = getParameterByName('profile');
+ 
+	 $(document).ready(function() {
+ 
+		// Check if the URL parameter is apples
+		if (dynamicContent == 'myscratchedaccount') {
+			$('#myscratchedaccount').show();
+		} 
+		// Check if the URL parameter is oranges
+		else if (dynamicContent == 'staff2') {
+			$('#staff2').show();
+		} 
+		// Check if the URL parameter is bananas
+		else if (dynamicContent == 'staff3') {
+			$('#staff3').show();
+		} 
+		// Check if the URL parmeter is empty or not defined, display default content
+		else {
+			$('#default-content').show();
+		}
+	});
+</script>
