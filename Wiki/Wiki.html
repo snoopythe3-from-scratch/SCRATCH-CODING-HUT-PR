@@ -3,79 +3,191 @@
 <head>
   <title>Global Wiki</title>
   <style>
-    body { font-family: Arial, sans-serif; margin: 40px; }
-    h1 { text-align: center; }
-    .page { border: 1px solid #ccc; padding: 10px; margin-bottom: 10px; }
-    textarea { width: 100%; height: 100px; }
-    button { margin-top: 5px; }
+    body {
+      font-family: Arial, sans-serif;
+      margin: 40px;
+      background-color: #f4f7f6;
+    }
+    h1 {
+      text-align: center;
+      color: #4CAF50;
+    }
+    .page {
+      border: 1px solid #ccc;
+      padding: 15px;
+      margin-bottom: 10px;
+      background-color: #ffffff;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+    .page h3 {
+      color: #333;
+    }
+    .button {
+      background-color: #4CAF50;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      cursor: pointer;
+      border-radius: 5px;
+      font-size: 16px;
+      transition: background-color 0.3s;
+    }
+    .button:hover {
+      background-color: #45a049;
+    }
+    .form-container {
+      display: none;
+      margin-top: 20px;
+      background-color: #ffffff;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      padding: 20px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+    .form-container input,
+    .form-container textarea {
+      width: 100%;
+      padding: 10px;
+      margin-top: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 16px;
+    }
+    .form-container textarea {
+      height: 150px;
+    }
+    .form-container button {
+      background-color: #2196F3;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      cursor: pointer;
+      border-radius: 5px;
+      font-size: 16px;
+      margin-top: 10px;
+    }
+    .form-container button:hover {
+      background-color: #1976D2;
+    }
   </style>
 </head>
 <body>
   <h1>Global Wiki</h1>
   <div id="wiki"></div>
 
-  <h2>Create New Page</h2>
-  <input id="new-title" placeholder="Page Title" /><br>
-  <textarea id="new-content" placeholder="Page Content"></textarea><br>
-  <button onclick="addPage()">Add Page</button>
+  <button class="button" onclick="toggleForm()">Create New Wiki Page</button>
+
+  <div class="form-container" id="form-container">
+    <h2>Create New Page</h2>
+    <input id="new-title" placeholder="Page Title" /><br>
+    <textarea id="new-content" placeholder="Page Content"></textarea><br>
+    <button onclick="addPage()">Add Page</button>
+  </div>
 
   <script>
-    const JSON_BIN_URL = 'https://api.jsonbin.io/v3/b/67c73ab2acd3cb34a8f4f304/latest';
+    const JSON_BIN_URL = 'https://api.jsonbin.io/v3/b/67c73db1e41b4d34e4a0bfb1/latest;
 
+    // Function to toggle visibility of the form
+    function toggleForm() {
+      const formContainer = document.getElementById('form-container');
+      formContainer.style.display = formContainer.style.display === 'none' || formContainer.style.display === '' ? 'block' : 'none';
+    }
+
+    // Fetch and display the wiki pages
     async function fetchWiki() {
-      const res = await fetch(JSON_BIN_URL);
-      const data = await res.json();
-      const pages = data.record;
-      document.getElementById('wiki').innerHTML = pages.map((page, index) => `
-        <div class="page">
-          <h3>${page.title}</h3>
-          <p>${page.content}</p>
-          <button onclick="editPage(${index})">Edit</button>
-          <button onclick="deletePage(${index})">Delete</button>
-        </div>
-      `).join('');
+      try {
+        const res = await fetch(JSON_BIN_URL);
+        if (!res.ok) {
+          throw new Error(`Failed to fetch wiki pages: ${res.status}`);
+        }
+        const data = await res.json();
+        const pages = data.record;
+        document.getElementById('wiki').innerHTML = pages.map((page, index) => `
+          <div class="page">
+            <h3>${page.title}</h3>
+            <p>${page.content}</p>
+            <button class="button" onclick="editPage(${index})">Edit</button>
+            <button class="button" onclick="deletePage(${index})">Delete</button>
+          </div>
+        `).join('');
+      } catch (error) {
+        console.error('Error fetching wiki:', error);
+      }
     }
 
+    // Update the wiki after adding/editing/deleting pages
     async function updateWiki(pages) {
-      await fetch(JSON_BIN_URL, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(pages)
-      });
-      fetchWiki();
+      try {
+        const res = await fetch(JSON_BIN_URL, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ record: pages })
+        });
+        if (!res.ok) {
+          throw new Error(`Failed to update wiki: ${res.status}`);
+        }
+        fetchWiki();  // Reload the wiki after the update
+      } catch (error) {
+        console.error('Error updating wiki:', error);
+      }
     }
 
+    // Add a new page to the wiki
     async function addPage() {
       const title = document.getElementById('new-title').value;
       const content = document.getElementById('new-content').value;
-      const res = await fetch(JSON_BIN_URL);
-      const data = await res.json();
-      const pages = data.record;
-      pages.push({ title, content });
-      updateWiki(pages);
+
+      if (!title || !content) {
+        alert('Title and content cannot be empty.');
+        return;
+      }
+
+      try {
+        const res = await fetch(JSON_BIN_URL);
+        const data = await res.json();
+        const pages = data.record;
+        pages.push({ title, content });
+        updateWiki(pages);  // Update the wiki with the new page
+      } catch (error) {
+        console.error('Error adding page:', error);
+      }
     }
 
+    // Edit an existing page
     async function editPage(index) {
       const newContent = prompt('Edit page content:');
       if (newContent !== null) {
-        const res = await fetch(JSON_BIN_URL);
-        const data = await res.json();
-        const pages = data.record;
-        pages[index].content = newContent;
-        updateWiki(pages);
+        try {
+          const res = await fetch(JSON_BIN_URL);
+          const data = await res.json();
+          const pages = data.record;
+          pages[index].content = newContent;
+          updateWiki(pages);  // Update the wiki with the edited page
+        } catch (error) {
+          console.error('Error editing page:', error);
+        }
       }
     }
 
+    // Delete a page from the wiki
     async function deletePage(index) {
       if (confirm('Are you sure you want to delete this page?')) {
-        const res = await fetch(JSON_BIN_URL);
-        const data = await res.json();
-        const pages = data.record;
-        pages.splice(index, 1);
-        updateWiki(pages);
+        try {
+          const res = await fetch(JSON_BIN_URL);
+          const data = await res.json();
+          const pages = data.record;
+          pages.splice(index, 1);  // Remove the page from the array
+          updateWiki(pages);  // Update the wiki with the remaining pages
+        } catch (error) {
+          console.error('Error deleting page:', error);
+        }
       }
     }
 
+    // Fetch the wiki when the page loads
     fetchWiki();
   </script>
 </body>
