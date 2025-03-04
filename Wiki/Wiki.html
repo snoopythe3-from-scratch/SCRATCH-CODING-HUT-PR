@@ -57,19 +57,6 @@
     .form-container textarea {
       height: 150px;
     }
-    .form-container button {
-      background-color: #2196F3;
-      color: white;
-      padding: 10px 20px;
-      border: none;
-      cursor: pointer;
-      border-radius: 5px;
-      font-size: 16px;
-      margin-top: 10px;
-    }
-    .form-container button:hover {
-      background-color: #1976D2;
-    }
   </style>
 </head>
 <body>
@@ -86,23 +73,17 @@
   </div>
 
   <script>
-    const JSON_BIN_URL = 'https://api.jsonbin.io/v3/b/67c73db1e41b4d34e4a0bfb1/latest';
+    const JSON_BIN_READ_URL = 'https://api.jsonbin.io/v3/b/67c73db1e41b4d34e4a0bfb1/latest';
+    const JSON_BIN_WRITE_URL = 'https://api.jsonbin.io/v3/b/67c73db1e41b4d34e4a0bfb1';
 
-    // Function to toggle visibility of the form
     function toggleForm() {
       const formContainer = document.getElementById('form-container');
       formContainer.style.display = formContainer.style.display === 'none' || formContainer.style.display === '' ? 'block' : 'none';
     }
 
-    // Fetch and display the wiki pages
     async function fetchWiki() {
       try {
-        const res = await fetch(JSON_BIN_URL, {
-          method: 'GET'
-        });
-        if (!res.ok) {
-          throw new Error(`Failed to fetch wiki pages: ${res.status}`);
-        }
+        const res = await fetch(JSON_BIN_READ_URL);
         const data = await res.json();
         const pages = data.record;
         document.getElementById('wiki').innerHTML = pages.map((page, index) => `
@@ -118,84 +99,66 @@
       }
     }
 
-    // Update the wiki after adding/editing/deleting pages
     async function updateWiki(pages) {
       try {
-        const res = await fetch(JSON_BIN_URL, {
+        const res = await fetch(JSON_BIN_WRITE_URL, {
           method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json'
-          },
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ record: pages })
         });
-        if (!res.ok) {
-          throw new Error(`Failed to update wiki: ${res.status}`);
-        }
-        fetchWiki();  // Reload the wiki after the update
+        fetchWiki();
       } catch (error) {
         console.error('Error updating wiki:', error);
       }
     }
 
-    // Add a new page to the wiki
     async function addPage() {
       const title = document.getElementById('new-title').value;
       const content = document.getElementById('new-content').value;
-
       if (!title || !content) {
         alert('Title and content cannot be empty.');
         return;
       }
-
       try {
-        const res = await fetch(JSON_BIN_URL, {
-          method: 'GET'
-        });
+        const res = await fetch(JSON_BIN_READ_URL);
         const data = await res.json();
         const pages = data.record;
         pages.push({ title, content });
-        updateWiki(pages);  // Update the wiki with the new page
+        updateWiki(pages);
       } catch (error) {
         console.error('Error adding page:', error);
       }
     }
 
-    // Edit an existing page
     async function editPage(index) {
       const newContent = prompt('Edit page content:');
       if (newContent !== null) {
         try {
-          const res = await fetch(JSON_BIN_URL, {
-            method: 'GET'
-          });
+          const res = await fetch(JSON_BIN_READ_URL);
           const data = await res.json();
           const pages = data.record;
           pages[index].content = newContent;
-          updateWiki(pages);  // Update the wiki with the edited page
+          updateWiki(pages);
         } catch (error) {
           console.error('Error editing page:', error);
         }
       }
     }
 
-    // Delete a page from the wiki
     async function deletePage(index) {
       if (confirm('Are you sure you want to delete this page?')) {
         try {
-          const res = await fetch(JSON_BIN_URL, {
-            method: 'GET'
-          });
+          const res = await fetch(JSON_BIN_READ_URL);
           const data = await res.json();
           const pages = data.record;
-          pages.splice(index, 1);  // Remove the page from the array
-          updateWiki(pages);  // Update the wiki with the remaining pages
+          pages.splice(index, 1);
+          updateWiki(pages);
         } catch (error) {
           console.error('Error deleting page:', error);
         }
       }
     }
 
-    // Fetch the wiki when the page loads
     fetchWiki();
   </script>
 </body>
