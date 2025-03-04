@@ -1,0 +1,16 @@
+name: Published Message
+
+on: [pull_request_target, issues]
+
+jobs:
+  greeting:
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+      pull-requests: write
+    steps:
+    - uses: 
+      with:
+        repo-token: ${{ secrets.GITHUB_TOKEN }}
+        issue-message: "Your issue has been published."
+        pr-message: "Your pull request has been sent for review."
