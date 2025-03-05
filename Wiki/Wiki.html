@@ -5,169 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Global Wiki</title>
     <style>
-        /* Reset some default styles */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #6e7dff, #8e44ad);
-            color: #fff;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            padding: 20px;
-        }
-
-        .container {
-            background-color: #fff;
-            padding: 40px;
-            border-radius: 8px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-            width: 100%;
-            max-width: 900px;
-            overflow: hidden;
-            position: relative;
-        }
-
-        h1 {
-            text-align: center;
-            font-size: 2.5rem;
-            color: #333;
-            margin-bottom: 30px;
-            font-weight: 600;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-        }
-
-        .form-section {
-            margin-bottom: 30px;
-        }
-
-        .form-section input,
-        .form-section textarea {
-            width: 100%;
-            padding: 15px;
-            font-size: 1rem;
-            margin-bottom: 15px;
-            border: 1px solid #ddd;
-            border-radius: 6px;
-            background-color: #f9f9f9;
-            transition: border-color 0.3s;
-        }
-
-        .form-section input:focus,
-        .form-section textarea:focus {
-            border-color: #6e7dff;
-            outline: none;
-            box-shadow: 0 0 5px rgba(110, 125, 255, 0.5);
-        }
-
-        .form-actions {
-            text-align: center;
-        }
-
-        .form-actions button {
-            padding: 12px 20px;
-            font-size: 1.2rem;
-            color: #fff;
-            background-color: #6e7dff;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: background-color 0.3s, transform 0.2s;
-            margin-top: 10px;
-        }
-
-        .form-actions button:hover {
-            background-color: #5560e2;
-            transform: scale(1.05);
-        }
-
-        .form-actions button:active {
-            transform: scale(1);
-        }
-
-        ul {
-            list-style: none;
-            margin-top: 30px;
-            padding: 0;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-        }
-
-        li {
-            background-color: #f9f9f9;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s, box-shadow 0.3s;
-        }
-
-        li:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
-        }
-
-        li h3 {
-            font-size: 1.6rem;
-            color: #333;
-            font-weight: 600;
-            margin-bottom: 10px;
-        }
-
-        li p {
-            font-size: 1rem;
-            color: #555;
-            margin-bottom: 15px;
-        }
-
-        li button {
-            padding: 10px 15px;
-            font-size: 1rem;
-            color: #fff;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            margin-right: 10px;
-            transition: background-color 0.3s;
-        }
-
-        li button.edit {
-            background-color: #ffa500;
-        }
-
-        li button.edit:hover {
-            background-color: #e68900;
-        }
-
-        li button.delete {
-            background-color: #f44336;
-        }
-
-        li button.delete:hover {
-            background-color: #d32f2f;
-        }
-
-        @media (max-width: 768px) {
-            ul {
-                grid-template-columns: 1fr;
-            }
-
-            h1 {
-                font-size: 2rem;
-            }
-
-            .form-actions button {
-                font-size: 1rem;
-            }
-        }
-
+        /* Add your styling here */
     </style>
 </head>
 <body>
@@ -184,9 +22,12 @@
     </div>
 
     <script>
+        const binId = '67c73db1e41b4d34e4a0bfb1'; // Your binId here
+
         const fetchWikis = async () => {
-            const response = await fetch('https://api.jsonbin.io/v3/b/67c73db1e41b4d34e4a0bfb1/latest'); // Updated link
-            const wikis = await response.json();
+            const response = await fetch(`https://api.jsonbin.io/v3/b/${binId}/latest`);
+            const result = await response.json();
+            const wikis = result.record || [];
             const list = document.getElementById('wiki-list');
             list.innerHTML = '';
             wikis.forEach(wiki => {
@@ -204,10 +45,11 @@
         const createWiki = async () => {
             const title = document.getElementById('wiki-title').value;
             const content = document.getElementById('wiki-content').value;
-            await fetch('https://api.jsonbin.io/v3/b/67c73db1e41b4d34e4a0bfb1/latest', { // Updated link
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ title, body: content, userId: 1 }) // Mocked userId as 1
+            const wiki = { title, body: content, id: Date.now() }; // Generate a unique ID
+            const response = await fetch(`https://api.jsonbin.io/v3/b/${binId}/latest`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json', 'X-Master-Key': 'your-master-key-here' }, // Replace with your actual Master Key
+                body: JSON.stringify({ record: [...(await fetchWikis()), wiki] })
             });
             fetchWikis();
         };
@@ -215,17 +57,24 @@
         const editWiki = async (id) => {
             const title = prompt('New Title:');
             const content = prompt('New Content:');
-            await fetch('https://api.jsonbin.io/v3/b/67c73db1e41b4d34e4a0bfb1/latest', { // Updated link
+            const updatedWiki = { id, title, body: content };
+
+            const response = await fetch(`https://api.jsonbin.io/v3/b/${binId}/latest`, {
                 method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ title, body: content, userId: 1 })
+                headers: { 'Content-Type': 'application/json', 'X-Master-Key': 'your-master-key-here' }, // Replace with your actual Master Key
+                body: JSON.stringify({ record: (await fetchWikis()).map(wiki => wiki.id === id ? updatedWiki : wiki) })
             });
             fetchWikis();
         };
 
         const deleteWiki = async (id) => {
-            if (confirm('Are you sure?')) {
-                await fetch('https://api.jsonbin.io/v3/b/67c73db1e41b4d34e4a0bfb1/latest', { method: 'DELETE' }); // Updated link
+            if (confirm('Are you sure you want to delete this wiki?')) {
+                const filteredWikis = (await fetchWikis()).filter(wiki => wiki.id !== id);
+                const response = await fetch(`https://api.jsonbin.io/v3/b/${binId}/latest`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json', 'X-Master-Key': 'your-master-key-here' }, // Replace with your actual Master Key
+                    body: JSON.stringify({ record: filteredWikis })
+                });
                 fetchWikis();
             }
         };
