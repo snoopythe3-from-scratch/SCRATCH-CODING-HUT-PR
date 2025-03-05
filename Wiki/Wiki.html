@@ -1,56 +1,108 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Global Wiki</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Advanced JSON Wiki</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 40px;
-      background-color: #f4f7f6;
-    }
-    h1 {
-      text-align: center;
-      color: #4CAF50;
-    }
-    .page {
-      border: 1px solid #ccc;
-      padding: 15px;
-      margin-bottom: 10px;
-      background-color: #ffffff;
-      border-radius: 8px;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    }
-    .page h3 {
-      color: #333;
-    }
-    .button {
-      background-color: #4CAF50;
-      color: white;
-      padding: 10px 20px;
-      border: none;
-      cursor: pointer;
-      border-radius: 5px;
-      font-size: 16px;
-      transition: background-color 0.3s;
-      margin-right: 5px;
-    }
-    .button:hover {
-      background-color: #45a049;
-    }
-    .edit-area {
-      width: 100%;
-      height: 100px;
-      margin-top: 10px;
-      padding: 10px;
-      font-size: 16px;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-    }
+    body { font-family: Arial, sans-serif; margin: 40px; }
+    #content { border: 1px solid #ccc; padding: 20px; min-height: 200px; }
+    textarea { width: 100%; height: 100px; }
+    button { margin-top: 10px; padding: 10px; }
+    input, textarea { margin-bottom: 10px; }
   </style>
 </head>
 <body>
-  <h1>Global Wiki</h1>
-  <div id="wiki"></div>
-<script src="https://cdn.jsdelivr.net/npm/wikijs@latest/dist/wiki.min.js"></script>
+  <h1>Advanced JSON Wiki</h1>
+  <label for="page">Page:</label>
+  <input type="text" id="page" placeholder="Enter page name" oninput="loadPage()">
+  
+  <div id="content"></div>
+  
+  <h2>Edit Page</h2>
+  <textarea id="editor" placeholder="Edit content here..."></textarea>
+  <button onclick="savePage()">Save Page</button>
+  <button onclick="deletePage()">Delete Page</button>
+  <button onclick="createNewPage()">Create New Page</button>
+
+  <script>
+    const apiUrl = 'https://jsonplaceholder.typicode.com/posts'; // Public API endpoint for testing
+    let wikiData = {};
+
+    // Fetch mock JSON data from the API
+    async function fetchJSON() {
+      const response = await fetch(apiUrl);
+      if (response.ok) {
+        const data = await response.json();
+        wikiData = data.reduce((acc, item) => {
+          acc[item.title] = item.body;
+          return acc;
+        }, {});
+        loadPage();
+      } else {
+        console.error('Error fetching JSON data:', response.statusText);
+      }
+    }
+
+    // Load page content from the mock wikiData
+    function loadPage() {
+      const page = document.getElementById('page').value;
+      const content = wikiData[page] || "This page does not exist. You can create it.";
+      document.getElementById('content').innerText = content;
+      document.getElementById('editor').value = wikiData[page] || '';
+    }
+
+    // Save or update a page in the wikiData (simulate saving to API)
+    async function savePage() {
+      const page = document.getElementById('page').value;
+      const content = document.getElementById('editor').value;
+      if (page) {
+        wikiData[page] = content;
+        await updateAPI();
+        loadPage();
+        alert(`Page "${page}" saved!`);
+      } else {
+        alert('Please enter a page name.');
+      }
+    }
+
+    // Simulate deleting a page from the wikiData (simulate API request)
+    async function deletePage() {
+      const page = document.getElementById('page').value;
+      if (page && wikiData[page]) {
+        delete wikiData[page];
+        await updateAPI();
+        loadPage();
+        alert(`Page "${page}" deleted!`);
+      } else {
+        alert('Page does not exist or is not selected.');
+      }
+    }
+
+    // Create a new page in the wikiData and simulate saving to API
+    async function createNewPage() {
+      const page = prompt("Enter the name of the new page:");
+      if (page && !wikiData[page]) {
+        wikiData[page] = "This is a new page.";
+        await updateAPI();
+        loadPage();
+        alert(`New page "${page}" created!`);
+      } else {
+        alert('Page already exists or invalid name.');
+      }
+    }
+
+    // Simulate updating the API (mock API call for save/delete operations)
+    async function updateAPI() {
+      // In a real API, you'd send a PUT or PATCH request to update the server.
+      console.log('Updated wiki data:', wikiData);
+      // Example mock API call, which will log data, but won't actually save it.
+    }
+
+    // Load the initial page when the page loads
+    window.onload = () => {
+      fetchJSON();
+    };
+  </script>
 </body>
 </html>
