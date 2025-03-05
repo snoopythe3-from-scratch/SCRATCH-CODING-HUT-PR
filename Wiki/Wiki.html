@@ -1,108 +1,66 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Advanced JSON Wiki</title>
-  <style>
-    body { font-family: Arial, sans-serif; margin: 40px; }
-    #content { border: 1px solid #ccc; padding: 20px; min-height: 200px; }
-    textarea { width: 100%; height: 100px; }
-    button { margin-top: 10px; padding: 10px; }
-    input, textarea { margin-bottom: 10px; }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Global Wiki</title>
 </head>
 <body>
-  <h1>Advanced JSON Wiki</h1>
-  <label for="page">Page:</label>
-  <input type="text" id="page" placeholder="Enter page name" oninput="loadPage()">
-  
-  <div id="content"></div>
-  
-  <h2>Edit Page</h2>
-  <textarea id="editor" placeholder="Edit content here..."></textarea>
-  <button onclick="savePage()">Save Page</button>
-  <button onclick="deletePage()">Delete Page</button>
-  <button onclick="createNewPage()">Create New Page</button>
+    <h1>Global Wiki</h1>
+    <div>
+        <input type="text" id="wiki-title" placeholder="Wiki Title">
+        <textarea id="wiki-content" placeholder="Wiki Content"></textarea>
+        <button onclick="createWiki()">Create Wiki</button>
+    </div>
+    <ul id="wiki-list"></ul>
 
-  <script>
-    const apiUrl = 'https://jsonplaceholder.typicode.com/posts'; // Public API endpoint for testing
-    let wikiData = {};
+    <script>
+const fetchWikis = async () => {
+    const response = await fetch('https://jsonplaceholder.typicode.com/posts'); // Mocked list of posts
+    const wikis = await response.json();
+    const list = document.getElementById('wiki-list');
+    list.innerHTML = '';
+    wikis.forEach(wiki => {
+        const li = document.createElement('li');
+        li.innerHTML = `
+            <h3>${wiki.title}</h3>
+            <p>${wiki.body}</p>
+            <button onclick="editWiki('${wiki.id}')">Edit</button>
+            <button onclick="deleteWiki('${wiki.id}')">Delete</button>
+        `;
+        list.appendChild(li);
+    });
+};
 
-    // Fetch mock JSON data from the API
-    async function fetchJSON() {
-      const response = await fetch(apiUrl);
-      if (response.ok) {
-        const data = await response.json();
-        wikiData = data.reduce((acc, item) => {
-          acc[item.title] = item.body;
-          return acc;
-        }, {});
-        loadPage();
-      } else {
-        console.error('Error fetching JSON data:', response.statusText);
-      }
+const createWiki = async () => {
+    const title = document.getElementById('wiki-title').value;
+    const content = document.getElementById('wiki-content').value;
+    await fetch('https://jsonplaceholder.typicode.com/posts', { // Create a new post
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ title, body: content, userId: 1 }) // Mocked userId as 1
+    });
+    fetchWikis();
+};
+
+const editWiki = async (id) => {
+    const title = prompt('New Title:');
+    const content = prompt('New Content:');
+    await fetch(`https://jsonplaceholder.typicode.com/posts/${id}`, { // Edit a specific post
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ title, body: content, userId: 1 })
+    });
+    fetchWikis();
+};
+
+const deleteWiki = async (id) => {
+    if (confirm('Are you sure?')) {
+        await fetch(`https://jsonplaceholder.typicode.com/posts/${id}`, { method: 'DELETE' }); // Delete a post
+        fetchWikis();
     }
+};
 
-    // Load page content from the mock wikiData
-    function loadPage() {
-      const page = document.getElementById('page').value;
-      const content = wikiData[page] || "This page does not exist. You can create it.";
-      document.getElementById('content').innerText = content;
-      document.getElementById('editor').value = wikiData[page] || '';
-    }
-
-    // Save or update a page in the wikiData (simulate saving to API)
-    async function savePage() {
-      const page = document.getElementById('page').value;
-      const content = document.getElementById('editor').value;
-      if (page) {
-        wikiData[page] = content;
-        await updateAPI();
-        loadPage();
-        alert(`Page "${page}" saved!`);
-      } else {
-        alert('Please enter a page name.');
-      }
-    }
-
-    // Simulate deleting a page from the wikiData (simulate API request)
-    async function deletePage() {
-      const page = document.getElementById('page').value;
-      if (page && wikiData[page]) {
-        delete wikiData[page];
-        await updateAPI();
-        loadPage();
-        alert(`Page "${page}" deleted!`);
-      } else {
-        alert('Page does not exist or is not selected.');
-      }
-    }
-
-    // Create a new page in the wikiData and simulate saving to API
-    async function createNewPage() {
-      const page = prompt("Enter the name of the new page:");
-      if (page && !wikiData[page]) {
-        wikiData[page] = "This is a new page.";
-        await updateAPI();
-        loadPage();
-        alert(`New page "${page}" created!`);
-      } else {
-        alert('Page already exists or invalid name.');
-      }
-    }
-
-    // Simulate updating the API (mock API call for save/delete operations)
-    async function updateAPI() {
-      // In a real API, you'd send a PUT or PATCH request to update the server.
-      console.log('Updated wiki data:', wikiData);
-      // Example mock API call, which will log data, but won't actually save it.
-    }
-
-    // Load the initial page when the page loads
-    window.onload = () => {
-      fetchJSON();
-    };
-  </script>
+    </script>
 </body>
 </html>
