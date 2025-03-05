@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -5,221 +6,96 @@
   <title>404 Not Found | Coding Hut Website</title>
   <style>
     body {
-      overflow-x: hidden;
-      font-family: Sans-Serif;
+      font-family: 'Arial', sans-serif;
       margin: 0;
+      background: #0f0f0f;
+      color: #e0e0e0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
     }
 
     .menu-container {
-      position: relative;
       display: flex;
+      justify-content: space-between;
       align-items: center;
-      margin-bottom: 20px;
-      background: #c04d4d;
-      color: #ffffff;
-      padding: 20px;
-      z-index: 1;
-      -webkit-user-select: none;
-      user-select: none;
-      box-sizing: border-box;
-    }
-
-    .menu-logo {
-      line-height: 0;
-      margin: 0 20px;
+      width: 100%;
+      background: #1a1a2e;
+      padding: 20px 5%;
+      box-shadow: 0 2px 15px rgba(0, 0, 0, 0.5);
     }
 
     .menu-logo img {
-      max-height: 40px;
-      max-width: 100px;
-      flex-shrink: 0;
+      max-height: 50px;
+      transition: transform 0.3s ease-in-out;
     }
 
-    .menu-container a {
-      text-decoration: none;
-      color: #c04d4d;
-      transition: color 0.3s ease;
-    }
-
-    .menu-container a:hover {
-      color: #50e3c2;
-    }
-
-    .menu-container input {
-      display: block;
-      width: 35px;
-      height: 25px;
-      margin: 0;
-      position: absolute;
-      cursor: pointer;
-      opacity: 0; /* hide this */
-      z-index: 2; /* and place it over the hamburger */
-      -webkit-touch-callout: none;
-    }
-
-    /* Burger menu */
-    .menu-container span {
-      display: block;
-      width: 33px;
-      height: 4px;
-      margin-bottom: 5px;
-      position: relative;
-      background: #ffffff;
-      border-radius: 3px;
-      z-index: 1;
-      transform-origin: 4px 0px;
-      transition: transform 0.5s cubic-bezier(0.77,0.2,0.05,1.0),
-                  background 0.5s cubic-bezier(0.77,0.2,0.05,1.0),
-                  opacity 0.55s ease;
-    }
-
-    .menu-container span:first-child {
-      transform-origin: 0% 0%;
-    }
-
-    .menu-container span:nth-child(3) {
-      transform-origin: 0% 100%;
-    }
-
-    .menu-container input:checked ~ span {
-      opacity: 1;
-      transform: rotate(45deg) translate(3px,-1px);
-      background: #c04d4d;
-    }
-
-    .menu-container input:checked ~ span:nth-child(4) {
-      opacity: 0;
-      transform: rotate(0deg) scale(0.2, 0.2);
-    }
-
-    .menu-container input:checked ~ span:nth-child(3) {
-      transform: rotate(-45deg) translate(-5px,11px);
+    .menu-logo img:hover {
+      transform: scale(1.1);
     }
 
     .menu ul {
+      display: flex;
+      gap: 20px;
       list-style: none;
+      padding: 0;
     }
 
-    .menu li {
-      padding: 10px 0;
-      font-size: 22px;
+    .menu a {
+      text-decoration: none;
+      color: #50e3c2;
+      font-weight: bold;
+      transition: color 0.3s ease-in-out;
     }
 
-    /* mobile styles */
-    @media only screen and (max-width: 767px) { 
-      .menu-container {
-        flex-direction: column;
-        align-items: flex-end;
-      }
-      
-      .menu-logo {
-        position: absolute;
-        left: 0;
-        top: 50%;
-        transform: translateY(-50%);
-      }
-
-      .menu-logo img {
-        max-height: 30px;
-      }
-
-      .menu {
-        position: absolute;
-        box-sizing: border-box;
-        width: 300px;
-        right: -300px;
-        top: 0;
-        margin: -20px;
-        padding: 75px 50px 50px;
-        background: #ffffff;
-        -webkit-font-smoothing: antialiased;
-        /* to stop flickering of text in safari */
-        transform-origin: 0% 0%;
-        transform: translateX(0%);
-        transition: transform 0.5s cubic-bezier(0.77,0.2,0.05,1.0);
-      }
-
-      .menu-container input:checked ~ .menu {
-        transform: translateX(-100%);
-      }
-    }
-
-    /* desktop styles */
-    @media only screen and (min-width: 768px) { 
-      .menu-container {
-        width: 100%;
-      }
-
-      .menu-container a {
-        color: #ffffff;
-      }
-
-      .menu-container input {
-        display: none;
-      }
-
-      /* Burger menu */
-      .menu-container span {
-        display: none;
-      }
-
-      .menu {
-        position: relative;
-        width: 100%;
-        display: flex;
-        justify-content: space-between;
-      }
-
-      .menu ul {
-        display: flex;
-        padding: 0;
-      }
-
-      .menu li {
-        padding: 0 20px;
-      }
+    .menu a:hover {
+      color: #ff4c4c;
     }
 
     h1, h2 {
       text-align: center;
+      font-size: 3rem;
     }
 
     h3 {
+      color: #ff4c4c;
       text-align: center;
-      color: #c04d4d;
     }
 
     .error-message {
       text-align: center;
-      font-size: 18px;
-    }
-
-    .error-message li {
-      list-style: none;
+      background: #1f1f1f;
+      padding: 30px;
+      border-radius: 20px;
+      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+      width: 90%;
+      max-width: 600px;
+      animation: fadeIn 1s ease-in-out;
     }
 
     .error-message a {
-      color: #c04d4d;
+      color: #50e3c2;
       text-decoration: none;
       transition: color 0.3s ease;
     }
 
     .error-message a:hover {
-      color: #50e3c2;
+      color: #ff4c4c;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
     }
   </style>
 </head>
 <body>
   <nav class="menu-container">
-    <input type="checkbox" aria-label="Toggle menu" />
-    <span></span>
-    <span></span>
-    <span></span>
-
     <a href="https://scratch-coding-hut.github.io" class="menu-logo">
       <img src="https://i.postimg.cc/6qgPbyGH/temp-Image-BJ164c.avif" alt="My Awesome Website"/>
     </a>
-
     <div class="menu">
       <ul>
         <li><a href="https://scratch-coding-hut.github.io">Home</a></li>
@@ -237,7 +113,7 @@
     <h3>Error:</h3>
     <h1><b>404</b></h1>
     <h2>Not Found</h2>
-    <p>We are sorry but the page you opened was not found.</p>
+    <p>We are sorry, but the page you opened was not found.</p>
     <br>
     <b>But here's what you could do!</b>
     <ul>
