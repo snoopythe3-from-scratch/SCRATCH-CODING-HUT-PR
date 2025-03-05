@@ -1,284 +1,123 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Global Wiki</title>
-    <style>
-        /* Reset some default styles */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Roboto', sans-serif;
-            background: linear-gradient(135deg, #1e2a8a, #b21eaf); /* Neon gradient */
-            color: #fff;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            padding: 20px;
-            overflow: hidden;
-        }
-
-        .container {
-            background-color: rgba(0, 0, 0, 0.8); /* Transparent black background */
-            padding: 40px;
-            border-radius: 20px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
-            width: 100%;
-            max-width: 900px;
-            overflow: hidden;
-            position: relative;
-        }
-
-        h1 {
-            text-align: center;
-            font-size: 3rem;
-            color: #fff;
-            margin-bottom: 30px;
-            font-weight: 700;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            text-shadow: 0 0 20px rgba(0, 255, 255, 0.6), 0 0 30px rgba(0, 255, 255, 0.3);
-        }
-
-        .form-section {
-            margin-bottom: 30px;
-        }
-
-        .form-section input,
-        .form-section textarea {
-            width: 100%;
-            padding: 16px;
-            font-size: 1rem;
-            margin-bottom: 15px;
-            border: 1px solid #444;
-            border-radius: 10px;
-            background-color: #333;
-            color: #fff;
-            transition: border-color 0.3s, box-shadow 0.3s;
-        }
-
-        .form-section input:focus,
-        .form-section textarea:focus {
-            border-color: #00d4ff;
-            outline: none;
-            box-shadow: 0 0 10px rgba(0, 212, 255, 0.8);
-        }
-
-        .form-actions {
-            text-align: center;
-        }
-
-        .form-actions button {
-            padding: 12px 20px;
-            font-size: 1.2rem;
-            color: #fff;
-            background-color: #00d4ff;
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
-            transition: background-color 0.3s, transform 0.2s, box-shadow 0.3s;
-            margin-top: 10px;
-        }
-
-        .form-actions button:hover {
-            background-color: #00a3cc;
-            transform: scale(1.05);
-            box-shadow: 0 0 20px rgba(0, 255, 255, 0.6);
-        }
-
-        .form-actions button:active {
-            transform: scale(1);
-        }
-
-        ul {
-            list-style: none;
-            margin-top: 30px;
-            padding: 0;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-        }
-
-        li {
-            background-color: rgba(0, 0, 0, 0.6); /* Slightly darker background */
-            padding: 20px;
-            border-radius: 12px;
-            box-shadow: 0 5px 30px rgba(0, 255, 255, 0.3);
-            transition: transform 0.3s, box-shadow 0.3s;
-            position: relative;
-        }
-
-        li:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 15px 50px rgba(0, 255, 255, 0.5);
-        }
-
-        li h3 {
-            font-size: 1.6rem;
-            color: #fff;
-            font-weight: 700;
-            margin-bottom: 10px;
-            text-transform: uppercase;
-            text-shadow: 0 0 10px rgba(0, 255, 255, 0.6);
-        }
-
-        li p {
-            font-size: 1rem;
-            color: #ddd;
-            margin-bottom: 15px;
-            line-height: 1.6;
-        }
-
-        li button {
-            padding: 10px 15px;
-            font-size: 1rem;
-            color: #fff;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            margin-right: 10px;
-            transition: background-color 0.3s, box-shadow 0.3s;
-        }
-
-        li button.edit {
-            background-color: #ffa500;
-        }
-
-        li button.edit:hover {
-            background-color: #e68900;
-            box-shadow: 0 0 15px rgba(255, 165, 0, 0.7);
-        }
-
-        li button.delete {
-            background-color: #f44336;
-        }
-
-        li button.delete:hover {
-            background-color: #d32f2f;
-            box-shadow: 0 0 15px rgba(244, 67, 54, 0.7);
-        }
-
-        @media (max-width: 768px) {
-            ul {
-                grid-template-columns: 1fr;
-            }
-
-            h1 {
-                font-size: 2.5rem;
-            }
-
-            .form-actions button {
-                font-size: 1rem;
-            }
-        }
-
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Wiki App with Appwrite</title>
+  <script src="https://unpkg.com/appwrite/dist/browser.min.js"></script>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background: #121212;
+      color: #e0e0e0;
+      margin: 2rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    h1, h2 {
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+    input, textarea {
+      background: #1f1f1f;
+      color: #e0e0e0;
+      border: 1px solid #333;
+      border-radius: 8px;
+      width: 100%;
+      max-width: 500px;
+      padding: 0.75rem;
+      margin-bottom: 1rem;
+      font-size: 1rem;
+    }
+    button {
+      background: #6200ea;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 0.75rem 1.5rem;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background 0.3s ease-in-out;
+    }
+    button:hover {
+      background: #bb86fc;
+    }
+    .page {
+      background: #1f1f1f;
+      border: 1px solid #333;
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-bottom: 1rem;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+      width: 100%;
+      max-width: 500px;
+    }
+    .page h3 {
+      margin-top: 0;
+    }
+    .page button {
+      background: #b00020;
+    }
+    .page button:hover {
+      background: #cf6679;
+    }
+  </style>
 </head>
-
 <body>
-    <div class="container">
-        <h1>Global Wiki</h1>
-        <div class="form-section">
-            <input type="text" id="wiki-title" placeholder="Wiki Title">
-            <textarea id="wiki-content" placeholder="Wiki Content"></textarea>
-        </div>
-        <div class="form-actions">
-            <button onclick="createWiki()">Create Wiki</button>
-        </div>
-        <ul id="wiki-list"></ul>
-    </div>
+  <h1>Simple Wiki App</h1>
 
-    <script>
-        const binId = "67c73db1e41b4d34e4a0bfb1"; // Replace this with your actual binId
+  <h2>Create New Page</h2>
+  <input type="text" id="title" placeholder="Page Title">
+  <textarea id="content" placeholder="Page Content"></textarea>
+  <button onclick="createPage()">Create Page</button>
 
-        // Fetch wikis from the server
-        const fetchWikis = async () => {
-            const response = await fetch(`https://api.jsonbin.io/v3/b/${binId}/latest`);
-            const result = await response.json();
+  <h2>Pages</h2>
+  <div id="pages"></div>
 
-            // Check if the 'record' property is available in the response and contains the array of wikis
-            const wikis = result.record || []; // Use empty array if no records
+  <script>
+    const { Client, Databases } = Appwrite;
+    const client = new Client();
 
-            const list = document.getElementById('wiki-list');
-            list.innerHTML = ''; // Clear existing list
+    client
+      .setEndpoint('https://cloud.appwrite.io/v1') // Your Appwrite endpoint
+      .setProject('67c8a359000d62253b33'); // Your project ID
 
-            // If it's an array, we loop through and display the wikis
-            if (Array.isArray(wikis)) {
-                wikis.forEach(wiki => {
-                    const li = document.createElement('li');
-                    li.innerHTML = `
-                        <h3>${wiki.title}</h3>
-                        <p>${wiki.body}</p>
-                        <button class="edit" onclick="editWiki('${wiki.id}')">Edit</button>
-                        <button class="delete" onclick="deleteWiki('${wiki.id}')">Delete</button>
-                    `;
-                    list.appendChild(li);
-                });
-            } else {
-                console.error('Expected an array but received:', wikis);
-            }
-        };
+    const databases = new Databases(client);
+    const databaseId = '67c8a3c0002993df00ef';
+    const collectionId = '67c8a4c2001ff9cdd339';
 
-        // Create a new wiki
-        const createWiki = async () => {
-            const title = document.getElementById('wiki-title').value;
-            const content = document.getElementById('wiki-content').value;
+    async function fetchPages() {
+      const response = await databases.listDocuments(databaseId, collectionId);
+      const pagesDiv = document.getElementById('pages');
+      pagesDiv.innerHTML = '';
+      response.documents.forEach(page => {
+        pagesDiv.innerHTML += `
+          <div class="page">
+            <h3>${page.title}</h3>
+            <p>${page.content}</p>
+            <button onclick="deletePage('${page.$id}')">Delete</button>
+          </div>
+        `;
+      });
+    }
 
-            if (!title || !content) {
-                alert('Both title and content are required!');
-                return;
-            }
+    async function createPage() {
+      const title = document.getElementById('title').value;
+      const content = document.getElementById('content').value;
+      await databases.createDocument(databaseId, collectionId, 'unique()', {
+        title,
+        content
+      });
+      fetchPages();
+    }
 
-            const response = await fetch(`https://api.jsonbin.io/v3/b/${binId}/latest`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ title, body: content, userId: 1 }) // Mocked userId as 1
-            });
+    async function deletePage(id) {
+      await databases.deleteDocument(databaseId, collectionId, id);
+      fetchPages();
+    }
 
-            if (response.ok) {
-                fetchWikis(); // Refresh the wiki list
-            } else {
-                alert('Error creating wiki!');
-            }
-        };
-
-        // Edit an existing wiki
-        const editWiki = async (id) => {
-            const title = prompt('New Title:');
-            const content = prompt('New Content:');
-
-            if (!title || !content) {
-                alert('Both title and content are required!');
-                return;
-            }
-
-            await fetch(`https://api.jsonbin.io/v3/b/${binId}/latest`, {
-                method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ title, body: content, userId: 1 })
-            });
-
-            fetchWikis(); // Refresh the wiki list
-        };
-
-        // Delete a wiki
-        const deleteWiki = async (id) => {
-            if (confirm('Are you sure?')) {
-                await fetch(`https://api.jsonbin.io/v3/b/${binId}/latest`, { method: 'DELETE' });
-                fetchWikis(); // Refresh the wiki list
-            }
-        };
-
-        // Fetch and display wikis on page load
-        document.addEventListener('DOMContentLoaded', fetchWikis);
-    </script>
+    fetchPages();
+  </script>
 </body>
-
 </html>
