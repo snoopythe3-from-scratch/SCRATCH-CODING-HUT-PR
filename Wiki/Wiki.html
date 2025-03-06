@@ -74,6 +74,30 @@
             window.location.href = `https://github.com/login/oauth/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&scope=repo`;
         }
 
+        async function handleRedirect() {
+            const code = new URLSearchParams(window.location.search).get('code');
+            if (code) {
+                try {
+                    const response = await fetch('/exchange-code', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ code })
+                    });
+                    const data = await response.json();
+                    if (data.access_token) {
+                        accessToken = data.access_token;
+                        fetchWiki();
+                    } else {
+                        console.error('Failed to exchange code:', data);
+                    }
+                } catch (error) {
+                    console.error('Error exchanging code:', error);
+                }
+            }
+        }
+
         async function fetchWiki() {
             try {
                 const response = await fetch(`${GITHUB_API_URL}/repos/${REPO}/issues`, {
@@ -137,51 +161,7 @@
             }
         }
 
-        async function editWikiEntry(number) {
-            const newContent = prompt('Enter new content:');
-            if (!newContent) return;
-            try {
-                const response = await fetch(`${GITHUB_API_URL}/repos/${REPO}/issues/${number}`, {
-                    method: 'PATCH',
-                    headers: {
-                        'Authorization': `Bearer ${accessToken}`,
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        body: newContent
-                    })
-                });
-                const data = await response.json();
-                if (response.ok) {
-                    fetchWiki();
-                } else {
-                    console.error('Failed to edit wiki entry:', data);
-                }
-            } catch (error) {
-                console.error('Error editing wiki entry:', error);
-            }
-        }
-
-        async function deleteWikiEntry(number) {
-            if (!confirm('Are you sure you want to delete this entry?')) return;
-            try {
-                const response = await fetch(`${GITHUB_API_URL}/repos/${REPO}/issues/${number}`, {
-                    method: 'DELETE',
-                    headers: {
-                        'Authorization': `Bearer ${accessToken}`
-                    }
-                });
-                if (response.ok) {
-                    fetchWiki();
-                } else {
-                    console.error('Failed to delete wiki entry:', response.statusText);
-                }
-            } catch (error) {
-                console.error('Error deleting wiki entry:', error);
-            }
-        }
-
-        fetchWiki();
+        handleRedirect();
     </script>
 </body>
 </html>
