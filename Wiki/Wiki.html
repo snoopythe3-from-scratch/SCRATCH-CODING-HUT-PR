@@ -9,8 +9,8 @@
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            background: #0f172a;
-            color: #f1f5f9;
+            background: #121212;
+            color: #ffffff;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -19,33 +19,37 @@
         }
         h1 {
             font-size: 3rem;
-            margin-bottom: 1rem;
+            margin: 20px 0;
         }
-        #wiki-entries div {
-            background: #1e293b;
-            padding: 1.5rem;
-            margin: 1rem 0;
+        #wiki-entries {
+            width: 90%;
+            max-width: 800px;
+        }
+        .entry {
+            background: #1f1f1f;
+            padding: 20px;
+            margin: 10px 0;
             border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(255, 255, 255, 0.1);
+            box-shadow: 0 4px 15px rgba(0, 255, 255, 0.1);
         }
         input, textarea, button {
-            width: 80%;
-            max-width: 500px;
-            margin: 0.5rem 0;
-            padding: 1rem;
+            width: 90%;
+            max-width: 800px;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 8px;
             border: none;
-            border-radius: 12px;
-            background: #334155;
-            color: #f1f5f9;
+            background: #333333;
+            color: #ffffff;
             font-size: 1rem;
         }
         button {
-            background: #3b82f6;
+            background: #00bcd4;
             cursor: pointer;
             transition: background 0.3s ease;
         }
         button:hover {
-            background: #2563eb;
+            background: #008c9e;
         }
     </style>
 </head>
@@ -54,19 +58,38 @@
     <div id="wiki-entries"></div>
     <input type="text" id="title" placeholder="Title">
     <textarea id="content" placeholder="Content"></textarea>
+    <button onclick="loginWithGithub()">Login with GitHub</button>
     <button onclick="createWikiEntry()">Create Entry</button>
 
     <script>
         const GITHUB_API_URL = 'https://api.github.com';
-        const REPO = 'scratch-coding-hut/Scratch-Coding-Hut.github.io';
-        const FILE_PATH = 'wiki.json';
-        const BRANCH = 'main';
+        const REPO = 'Scratch-Coding-Hut/scratch-coding-hut.github.io';
+        const OWNER = 'MyScratchedAccount';
+
+        let accessToken = '';
+
+        function loginWithGithub() {
+            const clientId = 'Ov23liIb2Kl6ib3erDKG';
+            const redirectUri = encodeURIComponent(window.location.href);
+            window.location.href = `https://github.com/login/oauth/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&scope=repo`;
+        }
 
         async function fetchWiki() {
-            const response = await fetch(`${GITHUB_API_URL}/repos/${REPO}/contents/${FILE_PATH}`);
-            const data = await response.json();
-            const content = JSON.parse(atob(data.content));
-            displayWiki(content);
+            try {
+                const response = await fetch(`${GITHUB_API_URL}/repos/${REPO}/issues`, {
+                    headers: {
+                        'Authorization': `Bearer ${accessToken}`
+                    }
+                });
+                const data = await response.json();
+                if (response.ok) {
+                    displayWiki(data);
+                } else {
+                    console.error('Failed to fetch wiki:', data);
+                }
+            } catch (error) {
+                console.error('Error fetching wiki:', error);
+            }
         }
 
         function displayWiki(entries) {
@@ -74,7 +97,12 @@
             container.innerHTML = '';
             entries.forEach(entry => {
                 const div = document.createElement('div');
-                div.innerHTML = `<h3>${entry.title}</h3><p>${entry.content}</p>`;
+                div.classList.add('entry');
+                div.innerHTML = `<h3>${entry.title}</h3><p>${entry.body}</p>`;
+                if (entry.user.login === OWNER || entry.assignees.some(a => a.login === OWNER)) {
+                    div.innerHTML += `<button onclick="editWikiEntry(${entry.number})">Edit</button>`;
+                    div.innerHTML += `<button onclick="deleteWikiEntry(${entry.number})">Delete</button>`;
+                }
                 container.appendChild(div);
             });
         }
@@ -82,30 +110,75 @@
         async function createWikiEntry() {
             const title = document.getElementById('title').value;
             const content = document.getElementById('content').value;
-            const response = await fetch(`${GITHUB_API_URL}/repos/${REPO}/contents/${FILE_PATH}`);
-            const data = await response.json();
-            const existingContent = JSON.parse(atob(data.content));
+            if (!title || !content) {
+                alert('Title and content are required!');
+                return;
+            }
+            try {
+                const response = await fetch(`${GITHUB_API_URL}/repos/${REPO}/issues`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${accessToken}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        title,
+                        body: content
+                    })
+                });
+                const data = await response.json();
+                if (response.ok) {
+                    fetchWiki();
+                } else {
+                    console.error('Failed to create wiki entry:', data);
+                }
+            } catch (error) {
+                console.error('Error creating wiki entry:', error);
+            }
+        }
 
-            const newEntry = { title, content };
-            existingContent.push(newEntry);
+        async function editWikiEntry(number) {
+            const newContent = prompt('Enter new content:');
+            if (!newContent) return;
+            try {
+                const response = await fetch(`${GITHUB_API_URL}/repos/${REPO}/issues/${number}`, {
+                    method: 'PATCH',
+                    headers: {
+                        'Authorization': `Bearer ${accessToken}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        body: newContent
+                    })
+                });
+                const data = await response.json();
+                if (response.ok) {
+                    fetchWiki();
+                } else {
+                    console.error('Failed to edit wiki entry:', data);
+                }
+            } catch (error) {
+                console.error('Error editing wiki entry:', error);
+            }
+        }
 
-            const updatedContent = btoa(JSON.stringify(existingContent, null, 2));
-
-            await fetch(`${GITHUB_API_URL}/repos/${REPO}/contents/${FILE_PATH}`, {
-                method: 'PUT',
-                headers: {
-                    'Authorization': `token ${YOUR_GITHUB_API_KEY}`,
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    message: 'Add new wiki entry',
-                    content: updatedContent,
-                    sha: data.sha,
-                    branch: BRANCH
-                })
-            });
-
-            fetchWiki();
+        async function deleteWikiEntry(number) {
+            if (!confirm('Are you sure you want to delete this entry?')) return;
+            try {
+                const response = await fetch(`${GITHUB_API_URL}/repos/${REPO}/issues/${number}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Authorization': `Bearer ${accessToken}`
+                    }
+                });
+                if (response.ok) {
+                    fetchWiki();
+                } else {
+                    console.error('Failed to delete wiki entry:', response.statusText);
+                }
+            } catch (error) {
+                console.error('Error deleting wiki entry:', error);
+            }
         }
 
         fetchWiki();
