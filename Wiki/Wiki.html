@@ -1,124 +1,114 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Wiki App with Appwrite</title>
-
-  <style>
-    body {
-      font-family: 'Arial', sans-serif;
-      background: #121212;
-      color: #e0e0e0;
-      margin: 2rem;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-    h1, h2 {
-      text-transform: uppercase;
-      letter-spacing: 2px;
-    }
-    input, textarea {
-      background: #1f1f1f;
-      color: #e0e0e0;
-      border: 1px solid #333;
-      border-radius: 8px;
-      width: 100%;
-      max-width: 500px;
-      padding: 0.75rem;
-      margin-bottom: 1rem;
-      font-size: 1rem;
-    }
-    button {
-      background: #6200ea;
-      color: #fff;
-      border: none;
-      border-radius: 8px;
-      padding: 0.75rem 1.5rem;
-      font-size: 1rem;
-      cursor: pointer;
-      transition: background 0.3s ease-in-out;
-    }
-    button:hover {
-      background: #bb86fc;
-    }
-    .page {
-      background: #1f1f1f;
-      border: 1px solid #333;
-      border-radius: 12px;
-      padding: 1.5rem;
-      margin-bottom: 1rem;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-      width: 100%;
-      max-width: 500px;
-    }
-    .page h3 {
-      margin-top: 0;
-    }
-    .page button {
-      background: #b00020;
-    }
-    .page button:hover {
-      background: #cf6679;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Global Wiki</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #0f172a;
+            color: #f1f5f9;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        #wiki-entries div {
+            background: #1e293b;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(255, 255, 255, 0.1);
+        }
+        input, textarea, button {
+            width: 80%;
+            max-width: 500px;
+            margin: 0.5rem 0;
+            padding: 1rem;
+            border: none;
+            border-radius: 12px;
+            background: #334155;
+            color: #f1f5f9;
+            font-size: 1rem;
+        }
+        button {
+            background: #3b82f6;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+        button:hover {
+            background: #2563eb;
+        }
+    </style>
 </head>
 <body>
-    <script src="https://unpkg.com/appwrite/dist/browser.min.js"></script>
-  <h1>Simple Wiki App</h1>
+    <h1>Global Wiki</h1>
+    <div id="wiki-entries"></div>
+    <input type="text" id="title" placeholder="Title">
+    <textarea id="content" placeholder="Content"></textarea>
+    <button onclick="createWikiEntry()">Create Entry</button>
 
-  <h2>Create New Page</h2>
-  <input type="text" id="title" placeholder="Page Title">
-  <textarea id="content" placeholder="Page Content"></textarea>
-  <button onclick="createPage()">Create Page</button>
+    <script>
+        const GITHUB_API_URL = 'https://api.github.com';
+        const REPO = 'scratch-coding-hut/Scratch-Coding-Hut.github.io';
+        const FILE_PATH = 'wiki.json';
+        const BRANCH = 'main';
 
-  <h2>Pages</h2>
-  <div id="pages"></div>
+        async function fetchWiki() {
+            const response = await fetch(`${GITHUB_API_URL}/repos/${REPO}/contents/${FILE_PATH}`);
+            const data = await response.json();
+            const content = JSON.parse(atob(data.content));
+            displayWiki(content);
+        }
 
-  <script>
-    const { Client, Databases } = Appwrite;
-    const client = new Client();
+        function displayWiki(entries) {
+            const container = document.getElementById('wiki-entries');
+            container.innerHTML = '';
+            entries.forEach(entry => {
+                const div = document.createElement('div');
+                div.innerHTML = `<h3>${entry.title}</h3><p>${entry.content}</p>`;
+                container.appendChild(div);
+            });
+        }
 
-    client
-      .setEndpoint('https://cloud.appwrite.io/v1') // Your Appwrite endpoint
-      .setProject('67c8a359000d62253b33'); // Your project ID
+        async function createWikiEntry() {
+            const title = document.getElementById('title').value;
+            const content = document.getElementById('content').value;
+            const response = await fetch(`${GITHUB_API_URL}/repos/${REPO}/contents/${FILE_PATH}`);
+            const data = await response.json();
+            const existingContent = JSON.parse(atob(data.content));
 
-    const databases = new Databases(client);
-    const databaseId = '67c8a3c0002993df00ef';
-    const collectionId = '67c8a4c2001ff9cdd339';
+            const newEntry = { title, content };
+            existingContent.push(newEntry);
 
-    async function fetchPages() {
-      const response = await databases.listDocuments(databaseId, collectionId);
-      const pagesDiv = document.getElementById('pages');
-      pagesDiv.innerHTML = '';
-      response.documents.forEach(page => {
-        pagesDiv.innerHTML += `
-          <div class="page">
-            <h3>${page.title}</h3>
-            <p>${page.content}</p>
-            <button onclick="deletePage('${page.$id}')">Delete</button>
-          </div>
-        `;
-      });
-    }
+            const updatedContent = btoa(JSON.stringify(existingContent, null, 2));
 
-    async function createPage() {
-      const title = document.getElementById('title').value;
-      const content = document.getElementById('content').value;
-      await databases.createDocument(databaseId, collectionId, 'unique()', {
-        title,
-        content
-      });
-      fetchPages();
-    }
+            await fetch(`${GITHUB_API_URL}/repos/${REPO}/contents/${FILE_PATH}`, {
+                method: 'PUT',
+                headers: {
+                    'Authorization': `token ${YOUR_GITHUB_API_KEY}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    message: 'Add new wiki entry',
+                    content: updatedContent,
+                    sha: data.sha,
+                    branch: BRANCH
+                })
+            });
 
-    async function deletePage(id) {
-      await databases.deleteDocument(databaseId, collectionId, id);
-      fetchPages();
-    }
+            fetchWiki();
+        }
 
-    fetchPages();
-  </script>
+        fetchWiki();
+    </script>
 </body>
 </html>
