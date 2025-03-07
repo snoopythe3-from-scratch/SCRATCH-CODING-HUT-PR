@@ -14,6 +14,16 @@
   partner shop 1
 
 	e7de6a09-2a4a-4afc-9988-21427996a790
+
+ <!-- Default Dynamic Section -->
+ <div id="default-content" class="authkey">
+   403.
+ </div>
+ <!-- Dynamic Section 1 -->
+ <div id="partner-shop-1" class="authkey">
+   Shop Dashboard
+</div>
+	
 </div>
 <!-- Dynamic Section 2 -->
 <div id="rude" class="dynamic-content">
@@ -29,6 +39,10 @@
 
 <style>
 .dynamic-content {
+    display:none;
+}
+	
+.authkey {
     display:none;
 }
 </style>
@@ -62,6 +76,26 @@
 		} 
 		// Check if the URL parameter is bananas
 		else if (dynamicContent == 'nosnip') {
+			$('#nosnip').show();
+		} 
+		// Check if the URL parmeter is empty or not defined, display default content
+		else {
+			$('#default-content').show();
+		}
+	});
+
+	 $(document).ready(function() {
+ 
+		// Check if the URL parameter is apples
+		if (authKey == 'partner-shop-1') {
+			$('#partner-shop-1').show();
+		} 
+		// Check if the URL parameter is oranges
+		else if (authKey == 'rude') {
+			$('#rude').show();
+		} 
+		// Check if the URL parameter is bananas
+		else if (authKey == 'nosnip') {
 			$('#nosnip').show();
 		} 
 		// Check if the URL parmeter is empty or not defined, display default content
