@@ -8,9 +8,10 @@
     body { font-family: Arial, sans-serif; background: #121212; color: white; margin: 0; padding: 0; }
     .container { max-width: 800px; margin: 50px auto; padding: 20px; }
     .input-group { display: flex; gap: 10px; margin-bottom: 20px; }
-    input { flex: 1; padding: 10px; border-radius: 8px; border: none; }
+    input, textarea { flex: 1; padding: 10px; border-radius: 8px; border: none; }
     button { padding: 10px; border-radius: 8px; border: none; background: #1f8ef1; color: white; cursor: pointer; }
-    .card { background: #1e1e1e; padding: 15px; border-radius: 12px; display: flex; justify-content: space-between; margin-bottom: 10px; }
+    .card { background: #1e1e1e; padding: 15px; border-radius: 12px; margin-bottom: 10px; }
+    .card-content { margin-bottom: 10px; }
     .actions button { margin-left: 5px; }
   </style>
 </head>
@@ -18,13 +19,14 @@
   <div class="container">
     <div class="input-group">
       <input id="newPageTitle" type="text" placeholder="New page title...">
+      <textarea id="newPageContent" placeholder="New page content..."></textarea>
       <button onclick="createPage()">+</button>
     </div>
     <div id="pages"></div>
   </div>
 
   <script>
-    const pages = [];
+    const pages = JSON.parse(localStorage.getItem('wikiPages')) || [];
 
     function renderPages() {
       const pagesDiv = document.getElementById('pages');
@@ -32,27 +34,35 @@
       pages.forEach((page, index) => {
         pagesDiv.innerHTML += `
           <div class="card">
-            <span>${page.title}</span>
+            <div class="card-content">
+              <strong>${page.title}</strong>
+              <p>${page.content}</p>
+            </div>
             <div class="actions">
               <button onclick="editPage(${index})">✏️</button>
               <button onclick="deletePage(${index})">🗑️</button>
             </div>
           </div>`;
       });
+      localStorage.setItem('wikiPages', JSON.stringify(pages));
     }
 
     function createPage() {
       const title = document.getElementById('newPageTitle').value;
-      if (!title) return;
-      pages.push({ title });
+      const content = document.getElementById('newPageContent').value;
+      if (!title || !content) return;
+      pages.push({ title, content });
       document.getElementById('newPageTitle').value = '';
+      document.getElementById('newPageContent').value = '';
       renderPages();
     }
 
     function editPage(index) {
       const newTitle = prompt('New title:', pages[index].title);
-      if (newTitle) {
+      const newContent = prompt('New content:', pages[index].content);
+      if (newTitle && newContent !== null) {
         pages[index].title = newTitle;
+        pages[index].content = newContent;
         renderPages();
       }
     }
@@ -61,6 +71,8 @@
       pages.splice(index, 1);
       renderPages();
     }
+
+    renderPages();
   </script>
 </body>
 </html>
