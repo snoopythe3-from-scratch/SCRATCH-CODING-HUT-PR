@@ -1,168 +1,66 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Global Wiki | Coding Hut</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background: #121212;
-            color: #ffffff;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-        }
-        h1 {
-            font-size: 3rem;
-            margin: 20px 0;
-        }
-        #wiki-entries {
-            width: 90%;
-            max-width: 800px;
-        }
-        .entry {
-            background: #1f1f1f;
-            padding: 20px;
-            margin: 10px 0;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0, 255, 255, 0.1);
-        }
-        input, textarea, button {
-            width: 90%;
-            max-width: 800px;
-            padding: 10px;
-            margin: 10px 0;
-            border-radius: 8px;
-            border: none;
-            background: #333333;
-            color: #ffffff;
-            font-size: 1rem;
-        }
-        button {
-            background: #00bcd4;
-            cursor: pointer;
-            transition: background 0.3s ease;
-        }
-        button:hover {
-            background: #008c9e;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Futuristic Wiki</title>
+  <style>
+    body { font-family: Arial, sans-serif; background: #121212; color: white; margin: 0; padding: 0; }
+    .container { max-width: 800px; margin: 50px auto; padding: 20px; }
+    .input-group { display: flex; gap: 10px; margin-bottom: 20px; }
+    input { flex: 1; padding: 10px; border-radius: 8px; border: none; }
+    button { padding: 10px; border-radius: 8px; border: none; background: #1f8ef1; color: white; cursor: pointer; }
+    .card { background: #1e1e1e; padding: 15px; border-radius: 12px; display: flex; justify-content: space-between; margin-bottom: 10px; }
+    .actions button { margin-left: 5px; }
+  </style>
 </head>
 <body>
-    <h1>Global Wiki</h1>
-    <h2>Coding Hut</h2>
-    <div id="wiki-entries"></div>
-    <input type="text" id="title" placeholder="Title">
-    <textarea id="content" placeholder="Content"></textarea>
-    <button onclick="loginWithGithub()">Login with GitHub</button>
-    <button onclick="createWikiEntry()">Create Entry</button>
+  <div class="container">
+    <div class="input-group">
+      <input id="newPageTitle" type="text" placeholder="New page title...">
+      <button onclick="createPage()">+</button>
+    </div>
+    <div id="pages"></div>
+  </div>
 
-    <script>
-        const GITHUB_API_URL = 'https://api.github.com';
-        const REPO = 'Scratch-Coding-Hut/scratch-coding-hut.github.io';
-        const OWNER = 'MyScratchedAccount';
+  <script>
+    const pages = [];
 
-        let accessToken = '';
+    function renderPages() {
+      const pagesDiv = document.getElementById('pages');
+      pagesDiv.innerHTML = '';
+      pages.forEach((page, index) => {
+        pagesDiv.innerHTML += `
+          <div class="card">
+            <span>${page.title}</span>
+            <div class="actions">
+              <button onclick="editPage(${index})">✏️</button>
+              <button onclick="deletePage(${index})">🗑️</button>
+            </div>
+          </div>`;
+      });
+    }
 
-        function loginWithGithub() {
-            const clientId = 'Ov23liIb2Kl6ib3erDKG';
-            const redirectUri = encodeURIComponent(window.location.href);
-            window.location.href = `https://github.com/login/oauth/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&scope=repo`;
-        }
+    function createPage() {
+      const title = document.getElementById('newPageTitle').value;
+      if (!title) return;
+      pages.push({ title });
+      document.getElementById('newPageTitle').value = '';
+      renderPages();
+    }
 
-        async function handleRedirect() {
-            const code = new URLSearchParams(window.location.search).get('code');
-            if (code) {
-                try {
-                    const response = await fetch('/exchange-code', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({ code })
-                    });
-                    const data = await response.json();
-                    if (data.access_token) {
-                        accessToken = data.access_token;
-                        fetchWiki();
-                    } else {
-                        console.error('Failed to exchange code:', data);
-                    }
-                } catch (error) {
-                    console.error('Error exchanging code:', error);
-                }
-            }
-        }
+    function editPage(index) {
+      const newTitle = prompt('New title:', pages[index].title);
+      if (newTitle) {
+        pages[index].title = newTitle;
+        renderPages();
+      }
+    }
 
-        async function fetchWiki() {
-            try {
-                const response = await fetch(`${GITHUB_API_URL}/repos/${REPO}/issues`, {
-                    headers: {
-                        'Authorization': `Bearer ${accessToken}`
-                    }
-                });
-                const data = await response.json();
-                if (response.ok) {
-                    displayWiki(data);
-                } else {
-                    console.error('Failed to fetch wiki:', data);
-                }
-            } catch (error) {
-                console.error('Error fetching wiki:', error);
-            }
-        }
-
-        function displayWiki(entries) {
-            const container = document.getElementById('wiki-entries');
-            container.innerHTML = '';
-            entries.forEach(entry => {
-                const div = document.createElement('div');
-                div.classList.add('entry');
-                div.innerHTML = `<h3>${entry.title}</h3><p>${entry.body}</p>`;
-                if (entry.user.login === OWNER || entry.assignees.some(a => a.login === OWNER)) {
-                    div.innerHTML += `<button onclick="editWikiEntry(${entry.number})">Edit</button>`;
-                    div.innerHTML += `<button onclick="deleteWikiEntry(${entry.number})">Delete</button>`;
-                }
-                container.appendChild(div);
-            });
-        }
-
-        async function createWikiEntry() {
-            const title = document.getElementById('title').value;
-            const content = document.getElementById('content').value;
-            if (!title || !content) {
-                alert('Title and content are required!');
-                return;
-            }
-            try {
-                const response = await fetch(`${GITHUB_API_URL}/repos/${REPO}/issues`, {
-                    method: 'POST',
-                    headers: {
-                        'Authorization': `Bearer ${accessToken}`,
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        title,
-                        body: content
-                    })
-                });
-                const data = await response.json();
-                if (response.ok) {
-                    fetchWiki();
-                } else {
-                    console.error('Failed to create wiki entry:', data);
-                }
-            } catch (error) {
-                console.error('Error creating wiki entry:', error);
-            }
-        }
-
-        handleRedirect();
-    </script>
+    function deletePage(index) {
+      pages.splice(index, 1);
+      renderPages();
+    }
+  </script>
 </body>
 </html>
