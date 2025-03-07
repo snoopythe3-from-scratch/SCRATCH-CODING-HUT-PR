@@ -9,19 +9,29 @@
 
     async function fetchPages() {
       const response = await fetch(apiUrl);
-      const pages = await response.json();
+      const data = await response.json();
+      
+      console.log('Fetched data:', data);  // Log the response to check its structure
+
+      // Check if data has a record property or handle the structure appropriately
+      const pages = data.record || [];  // Adjust based on actual response structure
       renderPages(pages);
     }
 
     async function createPage() {
-      const title = prompt('Enter title:');
-      const content = prompt('Enter content:');
+      const title = document.getElementById('createTitle').value;
+      const content = document.getElementById('createContent').value;
       if (!title || !content) return;
+
       await fetch(apiUrl, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ title, body: content })
       });
+
+      // Clear the input fields and refresh the list of pages
+      document.getElementById('createTitle').value = '';
+      document.getElementById('createContent').value = '';
       fetchPages();
     }
 
@@ -46,6 +56,7 @@
     function renderPages(pages) {
       const pagesDiv = document.getElementById('pages');
       pagesDiv.innerHTML = '';
+
       pages.forEach(page => {
         pagesDiv.innerHTML += `
           <div class="card">
@@ -64,21 +75,105 @@
     window.onload = fetchPages;
   </script>
   <style>
-    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #0f172a; color: #f8fafc; margin: 0; padding: 0; }
-    .container { max-width: 800px; margin: 50px auto; padding: 20px; }
-    .card { background: #1e293b; padding: 20px; border-radius: 16px; margin-bottom: 15px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5); transition: transform 0.2s, box-shadow 0.2s; }
-    .card:hover { transform: scale(1.02); box-shadow: 0 8px 20px rgba(0, 0, 0, 0.7); }
-    .card-content { margin-bottom: 10px; }
-    .card-content strong { font-size: 1.5em; color: #38bdf8; }
-    .actions { display: flex; gap: 10px; }
-    button { padding: 10px 15px; border-radius: 12px; border: none; background: #38bdf8; color: #0f172a; font-weight: bold; cursor: pointer; transition: background 0.3s ease-in-out; }
-    button:hover { background: #7dd3fc; }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #0f172a;
+      color: #f8fafc;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 50px auto;
+      padding: 20px;
+    }
+
+    .card {
+      background: #1e293b;
+      padding: 20px;
+      border-radius: 16px;
+      margin-bottom: 15px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .card:hover {
+      transform: scale(1.02);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.7);
+    }
+
+    .card-content {
+      margin-bottom: 10px;
+    }
+
+    .card-content strong {
+      font-size: 1.5em;
+      color: #38bdf8;
+    }
+
+    .actions {
+      display: flex;
+      gap: 10px;
+    }
+
+    button {
+      padding: 10px 15px;
+      border-radius: 12px;
+      border: none;
+      background: #38bdf8;
+      color: #0f172a;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.3s ease-in-out;
+    }
+
+    button:hover {
+      background: #7dd3fc;
+    }
+
+    .form-container {
+      margin-bottom: 20px;
+      background: #1e293b;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    }
+
+    .form-container input,
+    .form-container textarea {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 10px;
+      border-radius: 8px;
+      border: 1px solid #38bdf8;
+      background: #0f172a;
+      color: #f8fafc;
+      font-size: 1em;
+    }
+
+    .form-container button {
+      width: 100%;
+    }
+
+    h2 {
+      font-size: 1.8em;
+      color: #38bdf8;
+    }
   </style>
 </head>
 <body>
   <div class="container">
-    <button onclick="createPage()">➕ Create New Wiki</button>
-    <div id="pages"></div>
+    <h2>Create New Wiki</h2>
+    <div class="form-container">
+      <input type="text" id="createTitle" placeholder="Enter title" />
+      <textarea id="createContent" placeholder="Enter content"></textarea>
+      <button onclick="createPage()">➕ Create Wiki</button>
+    </div>
+
+    <div id="pages">
+      <!-- List of pages will appear here -->
+    </div>
   </div>
 </body>
 </html>
