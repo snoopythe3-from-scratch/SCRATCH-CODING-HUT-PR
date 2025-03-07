@@ -4,75 +4,81 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Futuristic Wiki</title>
-  <style>
-    body { font-family: Arial, sans-serif; background: #121212; color: white; margin: 0; padding: 0; }
-    .container { max-width: 800px; margin: 50px auto; padding: 20px; }
-    .input-group { display: flex; gap: 10px; margin-bottom: 20px; }
-    input, textarea { flex: 1; padding: 10px; border-radius: 8px; border: none; }
-    button { padding: 10px; border-radius: 8px; border: none; background: #1f8ef1; color: white; cursor: pointer; }
-    .card { background: #1e1e1e; padding: 15px; border-radius: 12px; margin-bottom: 10px; }
-    .card-content { margin-bottom: 10px; }
-    .actions button { margin-left: 5px; }
-  </style>
-</head>
-<body>
-  <div class="container">
-    <div class="input-group">
-      <input id="newPageTitle" type="text" placeholder="New page title...">
-      <textarea id="newPageContent" placeholder="New page content..."></textarea>
-      <button onclick="createPage()">+</button>
-    </div>
-    <div id="pages"></div>
-  </div>
-
   <script>
-    const pages = JSON.parse(localStorage.getItem('wikiPages')) || [];
+    const apiUrl = 'https://your-api-url-here.com/'; // I'm looking for a json api
 
-    function renderPages() {
+    async function fetchPages() {
+      const response = await fetch(apiUrl);
+      const pages = await response.json();
+      renderPages(pages);
+    }
+
+    async function createPage() {
+      const title = prompt('Enter title:');
+      const content = prompt('Enter content:');
+      if (!title || !content) return;
+      await fetch(apiUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ title, body: content })
+      });
+      fetchPages();
+    }
+
+    async function editPage(id, currentTitle, currentContent) {
+      const newTitle = prompt('New title:', currentTitle);
+      const newContent = prompt('New content:', currentContent);
+      if (newTitle && newContent !== null) {
+        await fetch(`${apiUrl}/${id}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ title: newTitle, body: newContent })
+        });
+        fetchPages();
+      }
+    }
+
+    async function deletePage(id) {
+      await fetch(`${apiUrl}/${id}`, { method: 'DELETE' });
+      fetchPages();
+    }
+
+    function renderPages(pages) {
       const pagesDiv = document.getElementById('pages');
       pagesDiv.innerHTML = '';
-      pages.forEach((page, index) => {
+      pages.forEach(page => {
         pagesDiv.innerHTML += `
           <div class="card">
             <div class="card-content">
               <strong>${page.title}</strong>
-              <p>${page.content}</p>
+              <p>${page.body}</p>
             </div>
             <div class="actions">
-              <button onclick="editPage(${index})">✏️</button>
-              <button onclick="deletePage(${index})">🗑️</button>
+              <button onclick="editPage(${page.id}, '${page.title}', '${page.body}')">✏️ Edit</button>
+              <button onclick="deletePage(${page.id})">🗑️ Delete</button>
             </div>
           </div>`;
       });
-      localStorage.setItem('wikiPages', JSON.stringify(pages));
     }
 
-    function createPage() {
-      const title = document.getElementById('newPageTitle').value;
-      const content = document.getElementById('newPageContent').value;
-      if (!title || !content) return;
-      pages.push({ title, content });
-      document.getElementById('newPageTitle').value = '';
-      document.getElementById('newPageContent').value = '';
-      renderPages();
-    }
-
-    function editPage(index) {
-      const newTitle = prompt('New title:', pages[index].title);
-      const newContent = prompt('New content:', pages[index].content);
-      if (newTitle && newContent !== null) {
-        pages[index].title = newTitle;
-        pages[index].content = newContent;
-        renderPages();
-      }
-    }
-
-    function deletePage(index) {
-      pages.splice(index, 1);
-      renderPages();
-    }
-
-    renderPages();
+    window.onload = fetchPages;
   </script>
+  <style>
+    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #0f172a; color: #f8fafc; margin: 0; padding: 0; }
+    .container { max-width: 800px; margin: 50px auto; padding: 20px; }
+    .card { background: #1e293b; padding: 20px; border-radius: 16px; margin-bottom: 15px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5); transition: transform 0.2s, box-shadow 0.2s; }
+    .card:hover { transform: scale(1.02); box-shadow: 0 8px 20px rgba(0, 0, 0, 0.7); }
+    .card-content { margin-bottom: 10px; }
+    .card-content strong { font-size: 1.5em; color: #38bdf8; }
+    .actions { display: flex; gap: 10px; }
+    button { padding: 10px 15px; border-radius: 12px; border: none; background: #38bdf8; color: #0f172a; font-weight: bold; cursor: pointer; transition: background 0.3s ease-in-out; }
+    button:hover { background: #7dd3fc; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <button onclick="createPage()">➕ Create New Wiki</button>
+    <div id="pages"></div>
+  </div>
 </body>
 </html>
