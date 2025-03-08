@@ -80,7 +80,6 @@
       if (pages.length === 0) {
         pagesDiv.innerHTML = '<p>No wiki pages found.</p>';
       }
-
       pages.forEach(page => {
         pagesDiv.innerHTML += `
           <div class="card">
@@ -89,6 +88,7 @@
               <p>${page.body}</p>
             </div>
             <div class="actions">
+            <b>Page Actions</b>
               <button onclick="editPage(${page.id}, '${page.title}', '${page.body}')">✏️ Edit</button>
               <button onclick="deletePage(${page.id})">🗑️ Delete</button>
             </div>
@@ -187,16 +187,18 @@
   </style>
 </head>
 <body>
-  <h1>Coding Hut Wiki</h1>
+  <center><h1>Coding Hut Wiki</h1></center>
   <div class="container">
     <h2>Create New Wiki Page</h2>
+    You can create a new wiki page using the below form.
     <div class="form-container">
       <input type="text" id="createTitle" placeholder="Enter title" />
       <textarea id="createContent" placeholder="Enter content"></textarea>
-      <button onclick="createPage()">➕ Create Wiki</button>
+      <button onclick="createPage()">➕ Create Wiki Page</button>
     </div>
     
     <h2>Wiki Pages</h2>
+    The wiki pages will appear below, we may have a search function in the future as well.
     <div id="pages">
       <!-- List of pages will appear here -->
     </div>
