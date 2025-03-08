@@ -63,8 +63,14 @@
     }
 
     async function deletePage(id) {
-      await fetch(`${apiUrl}/${id}`, { method: 'DELETE' });
-      fetchPages();
+      if (confirm("Are you sure that you want to delete this page? Abusing the delete function can result in a ban from Coding Hut.") == true) {
+        await fetch(`${apiUrl}/${id}`, { method: 'DELETE' });
+        fetchPages();
+        alert("The page has been deleted.");
+      } else {
+        alert("Cancelled!");
+      }
+      
     }
 
     function renderPages(pages) {
