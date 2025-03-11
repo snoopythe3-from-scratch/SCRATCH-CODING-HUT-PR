@@ -1,10 +1,11 @@
 # Security Policy
 
-You can report a vulnerability by using the Report Vulnerability button on the Security page.
-Also try not to post insecure content.
+If you discover a vulnerability, please report it using the "Report Vulnerability" button on our [Security page](#). We take security very seriously and appreciate your effort to make our system safer for everyone.
 
-> [!WARNING]
->  If you ever find a security vunderbilty, don't hack anyone with it. Instead only hack your own accounts. Doing this may get you punished.
+> **WARNING:**  
+> If you discover a security vulnerability, do not attempt to exploit it on any accounts other than your own. Unauthorized exploitation of security vulnerabilities is illegal and may result in severe penalties.
 
-> [!CAUTION]
->  Never report a security vunderbilty via the issues tab, as hackers will see straight away and they will hack everyone and you don't want that.
+> **CAUTION:**  
+> Refrain from reporting security vulnerabilities through the Issues tab. Public disclosure in that channel may alert malicious actors, thereby compromising the security of our community. Always use the designated reporting mechanism for vulnerabilities.
+
+Thank you for helping us keep our community safe!
