@@ -3,8 +3,6 @@
 
 This website serves as a hub for all things related to Coding Hut. Here, you'll find resources, tutorials, and projects to enhance your coding skills.
 
-### Important Note:
-Please refrain from deleting the `wikitemplate.html` and `sitemaplinks.html` files for no valid reason. Doing so may result in a temporary block and a coding hut strike.
 
 ### Build and Code Quality Status:
 [![Pages Build Deployment](URL_1)](URL_2)  
