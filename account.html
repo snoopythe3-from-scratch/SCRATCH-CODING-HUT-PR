@@ -6,7 +6,7 @@
     <title>Scratch Auth | Login & Dashboard | Coding Hut</title>
     <style>
         body {
-            font-family: Sans-Serif;
+            font-family: 'Arial', sans-serif;
             margin: 0;
             padding: 0;
             background-color: #f4f4f4;
@@ -16,18 +16,40 @@
             background-color: #c04d4d;
             color: white;
             padding: 20px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
         }
         .content {
             padding: 20px;
+            max-width: 600px;
+            margin: auto;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
         .message {
             color: red;
             font-weight: bold;
+            margin-top: 10px;
         }
         button {
-            padding: 10px;
+            padding: 10px 20px;
             margin: 10px;
             font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            background-color: #c04d4d;
+            color: white;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #a03a3a;
+        }
+        p {
+            line-height: 1.5;
+        }
+        a {
+            text-decoration: none;
         }
     </style>
     <script>
@@ -45,42 +67,41 @@
             }, 2000);
         }
 
-        // Simulate checking if the user is logged in
         function checkAuth() {
             const urlParams = new URLSearchParams(window.location.search);
             const authSuccess = urlParams.get('success'); // Example: Scratch Auth might return '?success=true'
-            const username = urlParams.get('username')
-            localStorage.setItem('username', username)
+            const username = urlParams.get('username');
+            if (username) {
+                localStorage.setItem('username', username);
+            }
             
             if (authSuccess === 'true') {
-                // Redirect to index.html if login was successful
                 localStorage.setItem('loggedIn', 'true');
                 window.location.href = 'index.html';
             }
         }
 
-        // Run this check when the page loads
         window.onload = checkAuth;
     </script>
 </head>
 <body>
-    <div class="header"><h1>Scratch Authentication</h1></div>
+    <div class="header">
+        <h1>Scratch Authentication</h1>
+    </div>
     <div class="content">
         <h2>Welcome! Please log in to continue.</h2>
         <button onclick="registerUser()">Register</button>
-        <p id="message" class="message"></p>
+        <p id="message" class="message" aria-live="polite"></p>
         <p>
             Please note: You will be redirected to an external site (Scratch Auth) for authentication. Once there, 
             choose the "Cloud Data" option for the quickest sign-in method.
         </p>
         <p>
-            If you are unable to use the "Cloud Data" option, other sign-in methods are available on Scratch Auth's page, for example profile commenting.
+            If you are unable to use the "Cloud Data" option, other sign-in methods are available on Scratch Auth's page, for example, profile commenting.
         </p>
-
-<a href="https://github.com/Scratch-Coding-Hut/Scratch-Coding-Hut.github.io/issues/new">
-      <button>Having trouble signing in? Report an issue</button>
-</a>
-        
+        <a href="https://github.com/Scratch-Coding-Hut/Scratch-Coding-Hut.github.io/issues/new">
+            <button>Having trouble signing in? Report an issue</button>
+        </a>
     </div>
 </body>
 </html>
