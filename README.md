@@ -1,8 +1,14 @@
 # Scratch-Coding-Hut.github.io
-Website for Coding Hut
+## Welcome to the Coding Hut
 
-Don't delete the wikitemplate.html and sitemaplinks.html files for no reason or else you will get temp blocked and a coding hut strike.
+This website serves as a hub for all things related to Coding Hut. Here, you'll find resources, tutorials, and projects to enhance your coding skills.
 
-[![pages-build-deployment](https://github.com/Scratch-Coding-Hut/Scratch-Coding-Hut.github.io/actions/workflows/pages/pages-build-deployment/badge.svg)](https://github.com/Scratch-Coding-Hut/Scratch-Coding-Hut.github.io/actions/workflows/pages/pages-build-deployment)
-[![CodeQL](https://github.com/Scratch-Coding-Hut/Scratch-Coding-Hut.github.io/actions/workflows/github-code-scanning/codeql/badge.svg)](https://github.com/Scratch-Coding-Hut/Scratch-Coding-Hut.github.io/actions/workflows/github-code-scanning/codeql)
-[![CodeQL Advanced](https://github.com/Scratch-Coding-Hut/Scratch-Coding-Hut.github.io/actions/workflows/codeql.yml/badge.svg)](https://github.com/Scratch-Coding-Hut/Scratch-Coding-Hut.github.io/actions/workflows/codeql.yml)
+### Important Note:
+Please refrain from deleting the `wikitemplate.html` and `sitemaplinks.html` files for no valid reason. Doing so may result in a temporary block and a coding hut strike.
+
+### Build and Code Quality Status:
+[![Pages Build Deployment](URL_1)](URL_2)  
+[![CodeQL Static Analysis](URL_3)](URL_4)  
+[![CodeQL Advanced Analysis](URL_5)](URL_6)
+
+Explore our resources and happy coding!
