@@ -162,6 +162,13 @@ mcgdj is a scratcher fluent in many languages, including Python, bash, and websi
 <br>
 DESCRIPTION HERE
 </div>
+<!-- Dynamic Section 4 -->
+<div id="staff4" class="dynamic-content">
+<h2>Another staff member</h2>
+<h3>Role: </h3>
+<br>
+DESCRIPTION HERE
+</div>
 	
     <script>
       function toggleMenu() {
@@ -200,6 +207,10 @@ DESCRIPTION HERE
 		// Check if the URL parameter is bananas
 		else if (dynamicContent == 'staff3') {
 			$('#staff3').show();
+		} 
+		// Check if the URL parameter is another staff member
+		else if (dynamicContent == 'staff4') {
+			$('#staff4').show();
 		} 
 		// Check if the URL parmeter is empty or not defined, display default content
 		else {
