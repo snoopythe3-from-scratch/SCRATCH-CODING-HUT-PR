@@ -1,7 +1,0 @@
-- name: Prevent file change
-  uses: xalvarez/prevent-file-change-action@v2
-   with:
-    githubToken: ${{ secrets.GITHUB_TOKEN }}
-    pattern: .*\.me
-    trustedAuthors: xalvarez
-    allowNewFiles: false
