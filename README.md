@@ -15,3 +15,5 @@ That's a good question, let's find out!
 [![How Well Is The Staff Working?](https://github.com/Scratch-Coding-Hut/Scratch-Coding-Hut.github.io/actions/workflows/staff.yml/badge.svg)](https://github.com/Scratch-Coding-Hut/Scratch-Coding-Hut.github.io/actions/workflows/staff.yml)
 
 Explore our resources and happy coding!
+
+[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/Scratch-Coding-Hut/Scratch-Coding-Hut.github.io)
