@@ -1,2 +1,4 @@
 User-agent: *
 Disallow: /sites/YOURSITEURL/home/
+Disallow: /account/
+Disallow: /account-dashboard/
