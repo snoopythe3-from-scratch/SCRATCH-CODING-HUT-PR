@@ -134,13 +134,22 @@ body {
     <p id="data" style="text-align:center;">COMING SOON</p>
 
     <script>
-      const username = localStorage.getItem('username');
-      if (username) {
-        document.getElementById('user').textContent = username;
-        const res = await fetch('scratch-coding-hut-data.onrender.com')
-        if (res.json()) { 
-          document.getElementById('data').textContent = res.json()
+     const username = localStorage.getItem('username');
+if (username) {
+    document.getElementById('user').textContent = username;
+
+    try {
+        const res = await fetch('https://scratch-coding-hut-data.onrender.com');
+        const data = await res.json();
+
+        if (data) {
+            document.getElementById('data').textContent = JSON.stringify(data);
         }
+    } catch (error) {
+        console.error('Error fetching data:', error);
+    }
+}
+ 
       function toggleMenu() {
         var menu = document.querySelector('.menu');
         menu.style.display = menu.style.display === 'flex' ? 'none' : 'flex';
