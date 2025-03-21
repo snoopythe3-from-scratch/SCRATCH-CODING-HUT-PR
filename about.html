@@ -124,7 +124,7 @@ body {
         </ul>
         <ul>
           <li><a href="https://scratch-coding-hut.github.io/messages">Messages</a></li>
-          <li><a href="https://scratch-coding-hut.github.io/account">My Account</a></li>
+          <li><a id="user" href="https://scratch-coding-hut.github.io/account">My Account</a></li>
         </ul>
       </div>
     </nav>
@@ -137,6 +137,11 @@ Coding Hut was founded by <a href='https://scratch.mit.edu/users/MyScratchedAcco
 
     
     <script>
+      const username = localStorage.getItem('username');
+      if (user) {
+        document.getElementById('user').textContent = username;
+        document.getElementById('user').href = 'account-dashboard';
+      }
       function toggleMenu() {
         var menu = document.querySelector('.menu');
         menu.style.display = menu.style.display === 'flex' ? 'none' : 'flex';
