@@ -6,7 +6,7 @@
     <title>Scratch Auth | Login & Dashboard | Coding Hut</title>
     <style>
         body {
-            font-family: 'Arial', sans-serif;
+            font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
             background-color: #f4f4f4;
@@ -18,10 +18,10 @@
             padding: 20px;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
         }
-        .content {
+        .content, .container {
             padding: 20px;
             max-width: 600px;
-            margin: auto;
+            margin: 20px auto;
             background-color: white;
             border-radius: 8px;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
@@ -32,8 +32,9 @@
             margin-top: 10px;
         }
         button {
-            padding: 10px 20px;
-            margin: 10px;
+            width: 100%;
+            padding: 12px 20px;
+            margin: 10px 0;
             font-size: 16px;
             border: none;
             border-radius: 5px;
@@ -45,22 +46,32 @@
         button:hover {
             background-color: #a03a3a;
         }
+        input {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+        }
         p {
             line-height: 1.5;
         }
         a {
             text-decoration: none;
+            color: white;
         }
     </style>
     <script>
+        const serverUrl = 'https://image-hoster.onrender.com';
+
         function registerScratchAuth() {
             const messageBox = document.getElementById("message");
-
             const redirectLocation = encodeURIComponent(window.location.href);
             const authUrl = `https://auth.itinerary.eu.org/auth/?redirect=${redirectLocation}&name=Coding%20Hut&sign_in_method=cloud`;
 
             messageBox.style.color = "green";
-            messageBox.textContent = `Redirecting to Scratch Auth... Follow the steps there.`;
+            messageBox.textContent = "Redirecting to Scratch Auth... Follow the steps there.";
 
             setTimeout(() => {
                 window.location.href = authUrl;
@@ -69,8 +80,9 @@
 
         function checkAuth() {
             const urlParams = new URLSearchParams(window.location.search);
-            const authSuccess = urlParams.get('success'); // Example: Scratch Auth might return '?success=true'
+            const authSuccess = urlParams.get('success');
             const username = urlParams.get('username');
+            
             if (username) {
                 localStorage.setItem('username', username);
             }
@@ -82,35 +94,64 @@
         }
 
         window.onload = checkAuth;
+
+        if (localStorage.getItem('verifiedUser')) {
+            window.location.href = 'index.html';
+        }
+
+        async function login() {
+            let username = document.getElementById('username').value.trim().toLowerCase();
+            if (!username) {
+                alert('Enter your Scratch username.');
+                return;
+            }
+
+            const response = await fetch(`${serverUrl}/login`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username })
+            });
+
+            const result = await response.json();
+            if (result.verified) {
+                localStorage.setItem('verifiedUser', username);
+                window.location.href = 'upload.html';
+            } else {
+                document.getElementById('codeMessage').textContent = result.message || 'Login failed. Please try again.';
+            }
+        }
+
+        async function verifyCode() {
+            let username = document.getElementById('username').value.trim().toLowerCase();
+            if (!username) {
+                alert('Enter your username first.');
+                return;
+            }
+
+            const response = await fetch(`${serverUrl}/verify`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username })
+            });
+
+            const result = await response.json();
+            if (result.verified) {
+                localStorage.setItem('verifiedUser', username);
+                window.location.href = 'index.html';
+            } else {
+                alert(result.message || 'Verification failed. Please try again.');
+            }
+        }
     </script>
 </head>
 <body>
     <div class="header">
         <h1>Scratch Authentication</h1>
     </div>
+
     <div class="content">
         <h2>Welcome! Please log in to continue.</h2>
-        <button onclick="registerScratchAuth()">Register With ScratchAuth (Currently not working.)</button>
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login</title>
-  <style>
-    body { font-family: Arial, sans-serif; background: #f4f4f4; display: flex; align-items: center; justify-content: center; height: 100vh; }
-    .container { background: #fff; padding: 20px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); text-align: center; width: 350px; }
-    input, button { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ddd; border-radius: 5px; font-size: 16px; }
-    button { background: #007bff; color: white; border: none; cursor: pointer; }
-  </style>
-</head>
-<body>
-  <div class="container">
-    <button onclick="login()">Login With APIAuth (Made by <a href="scratch.mit.edu/users/kRxZy_kRxZy>kRxZy_kRxZy</a>)</button>
-    <p id="codeMessage"></p>
-    <button onclick="verifyCode()">Done</button>
-  </div>
+        <button onclick="registerScratchAuth()">Register With ScratchAuth</button>
         <p id="message" class="message" aria-live="polite"></p>
         <p>
             Please note: You will be redirected to an external site (Scratch Auth) for authentication. Once there, 
@@ -122,51 +163,14 @@
         <a href="https://github.com/Scratch-Coding-Hut/Scratch-Coding-Hut.github.io/issues/new">
             <button>Having trouble signing in? Report an issue</button>
         </a>
-  <script>
-    const serverUrl = 'https://image-hoster.onrender.com';
+    </div>
 
-    if (localStorage.getItem('verifiedUser')) {
-      window.location.href = 'index';
-    }
-
-    async function login() {
-      let username = document.getElementById('username').value.trim().toLowerCase();
-      if (!username) return alert('Enter your Scratch username.');
-
-      const response = await fetch(`${serverUrl}/login`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username })
-      });
-
-      const result = await response.json();
-      if (result.verified) {
-        localStorage.setItem('verifiedUser', username);
-        window.location.href = 'upload.html';
-      } else {
-        document.getElementById('codeMessage').textContent = result.message;
-      }
-    }
-
-    async function verifyCode() {
-      let username = document.getElementById('username').value.trim().toLowerCase();
-      if (!username) return alert('Enter your username first.');
-
-      const response = await fetch(`${serverUrl}/verify`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username })
-      });
-
-      const result = await response.json();
-      if (result.verified) {
-        localStorage.setItem('verifiedUser', username);
-        window.location.href = 'index.html';
-      } else {
-        alert(result.message || 'Verification failed.');
-      }
-    }
-  </script>
+    <div class="container">
+        <h2>Login Using APIAuth</h2>
+        <input type="text" id="username" placeholder="Enter your Scratch username" />
+        <button onclick="login()">Login With APIAuth (Made by <a href="https://scratch.mit.edu/users/kRxZy_kRxZy/" target="_blank" style="color: red">kRxZy_kRxZy</a>)</button>
+        <p id="codeMessage" class="message"></p>
+        <button onclick="verifyCode()">Verify Code</button>
     </div>
 </body>
 </html>
