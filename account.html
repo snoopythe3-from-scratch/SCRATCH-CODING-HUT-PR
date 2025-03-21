@@ -120,32 +120,39 @@
             window.location.href = 'index.html'; // Redirect to the dashboard if already logged in
         }
         checkAuth()
+const user = localStorage.getItem('username')
+const text = document.getElementById('text');
+const loggedIn = document.getElementById('loggedIn')
+        if (username) {
+            text.style.display = 'none';
+            loggedIn.style.display = 'block';
+            loggedIn.textContent = `Welcome to your account ${username}!`
+        }
     </script>
 </head>
 <body>
-    <div class="header">
+    <div id="text" class="header">
         <h1>Scratch Authentication</h1>
     </div>
+    <div id="loggedIn" class="header"></div>
 
-    <div class="content">
+    <div id="text" class="content">
         <h2>Welcome! Please log in to continue.</h2>
         <button onclick="registerScratchAuth()">Register With ScratchAuth</button>
-        <p id="message" class="message" aria-live="polite"></p>
-        <p>
+        <p id="message" id="text" class="message" aria-live="polite"></p>
+        <p id="text">
             Please note: You will be redirected to an external site (ScratchAuth) for authentication. Once there, 
             choose the "Cloud Data" option for the quickest sign-in method.
-        </p>
-        <p>
-            If you are unable to use the "Cloud Data" option, other sign-in methods are available on Scratch Auth's page, for example, profile commenting.
-        </p>
+    
+            If you are unable to use the "Cloud Data" option, other sign-in methods are available on Scratch Auth's page, for example, profile commenting.</p>
 
     </div>
 
-    <div class="container">
+    <div id="text" class="container">
         <h2>Login Using APIAuth</h2>
         <button onclick="registerApiAuth()">Login With APIAuth (Made by <a href="https://scratch.mit.edu/users/kRxZy_kRxZy/" target="_blank" style="color: black">kRxZy_kRxZy</a>)</button>
     </div>
-       <div class="container"><a href="https://github.com/Scratch-Coding-Hut/Scratch-Coding-Hut.github.io/issues/new">
+       <div id="text" class="container"><a href="https://github.com/Scratch-Coding-Hut/Scratch-Coding-Hut.github.io/issues/new">
             <button>Having trouble signing in? Report an issue</button></a><div>
 </body>
 </html>
