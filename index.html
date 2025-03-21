@@ -127,7 +127,7 @@ body {
         </ul>
         <ul>
           <li><a href="https://scratch-coding-hut.github.io/messages">Messages</a></li>
-          <li><a href="https://scratch-coding-hut.github.io/account">My Account</a></li>
+          <li><a id="user" href="https://scratch-coding-hut.github.io/account">My Account</a></li>
         </ul>
       </div>
     </nav>
@@ -139,6 +139,10 @@ body {
 You can learn more about Coding Hut on our About page.
 
     <script>
+     if (localStorage.getItem('username')) {
+       document.getElementById('user').textContent = localStorage.getItem('username');
+}
+      
       function toggleMenu() {
         var menu = document.querySelector('.menu');
         menu.style.display = menu.style.display === 'flex' ? 'none' : 'flex';
