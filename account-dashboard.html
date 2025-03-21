@@ -139,7 +139,7 @@ if (username) {
     document.getElementById('user').textContent = username;
 
     try {
-        const res = await fetch('https://scratch-coding-hut-data.onrender.com');
+        const res = await fetch(`https://scratch-coding-hut-data.onrender.com/${username}`);
         const data = await res.json();
 
         if (data) {
