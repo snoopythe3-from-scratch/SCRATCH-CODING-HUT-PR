@@ -40,7 +40,7 @@
     </ul>
     <ul>
       <li>
-        <a href="https://scratch-coding-hut.github.io/account">
+        <a id="users" href="https://scratch-coding-hut.github.io/account">
           My Account
         </a>
       </li>
@@ -65,6 +65,8 @@ But now let's move onto the content.
   
 <h2>List Of Wiki Pages,</h2>
 None yet. Stay tuned! If you make one please list it here as well.</body>
+  <script>const user = document.getElementById('users');
+  user.textContent = localStorage.getItem('username'); </script>
 </html>
 
 <style>body {
