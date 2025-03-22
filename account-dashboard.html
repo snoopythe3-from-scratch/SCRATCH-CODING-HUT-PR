@@ -99,19 +99,39 @@
           display: none;
         }
       }
+
+      .settings-form {
+        margin-top: 20px;
+        text-align: center;
+      }
+
+      .settings-form input {
+        padding: 10px;
+        margin: 5px;
+        font-size: 18px;
+      }
+
+      .settings-form button {
+        padding: 10px 20px;
+        background-color: #50e3c2;
+        color: white;
+        border: none;
+        cursor: pointer;
+      }
+
+      .settings-form button:hover {
+        background-color: #4ba99d;
+      }
     </style>
   </head>
   <body>
     <nav class="menu-container">
-      <!-- Logo -->
       <a href="https://scratch-coding-hut.github.io" class="menu-logo">
         <img src="Images/Coding-Hut-Logo.png" alt="Coding Hut Logo" width="50" height="50" />
       </a>
 
-      <!-- Menu for Mobile -->
       <span class="hamburger" onclick="toggleMenu()">&#9776;</span>
 
-      <!-- Menu Items -->
       <div class="menu">
         <ul>
           <li><a href="https://scratch-coding-hut.github.io">Home</a></li>
@@ -130,8 +150,16 @@
     <h2 style="text-align: center">Welcome to your dashboard</h2>
     <p id="data" style="text-align: center">COMING SOON</p>
 
+    <div class="settings-form">
+      <h3>Update Your Settings</h3>
+      <form id="settings-form">
+        <input type="email" id="email" placeholder="Update your email" />
+        <input type="number" id="points" placeholder="Update your points" />
+        <button type="submit">Save Settings</button>
+      </form>
+    </div>
+
     <script>
-      // Fetch user data and update UI
       async function loadUserData() {
         const username = localStorage.getItem("username");
 
@@ -152,13 +180,52 @@
         }
       }
 
-      // Menu toggle for mobile
+      async function updateUserSettings(event) {
+        event.preventDefault();
+
+        const username = localStorage.getItem("username");
+        const email = document.getElementById("email").value;
+        const points = document.getElementById("points").value;
+
+        if (!email && !points) {
+          alert("Please enter at least one value to update.");
+          return;
+        }
+
+        const updatedData = {};
+        if (email) updatedData.email = email;
+        if (points) updatedData.points = parseInt(points);
+
+        try {
+          const res = await fetch(`https://scratch-coding-hut-data.onrender.com/${username}`, {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(updatedData),
+          });
+
+          const data = await res.json();
+
+          if (data) {
+            document.getElementById("data").textContent = JSON.stringify(data);
+            alert("Settings updated successfully!");
+          } else {
+            alert("Error updating settings.");
+          }
+        } catch (error) {
+          console.error("Error updating data:", error);
+          alert("Failed to update settings.");
+        }
+      }
+
+      document.getElementById("settings-form").addEventListener("submit", updateUserSettings);
+
       function toggleMenu() {
         var menu = document.querySelector(".menu");
         menu.style.display = menu.style.display === "flex" ? "none" : "flex";
       }
 
-      // Load user data on page load
       document.addEventListener("DOMContentLoaded", loadUserData);
     </script>
   </body>
