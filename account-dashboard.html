@@ -150,28 +150,33 @@
     <h2 style="text-align: center">Welcome to your dashboard!</h2>
     <p id="data" style="text-align: center">Loading...</p>
 
-
-
     <script>
       async function loadUserData() {
         const username = localStorage.getItem("username");
 
         if (username) {
-          document.getElementById("user").textContent = username;
+          document.getElementById("user").textContent = `Hello, ${username}`;
 
           try {
             const res = await fetch(`https://scratch-coding-hut-data.onrender.com/${username}`);
             const data = await res.json();
 
+            console.log("Fetched data:", data); // Debugging line to check the data
+
             if (data) {
               document.getElementById("data").textContent = JSON.stringify(data);
+            } else {
+              document.getElementById("data").textContent = "No data available.";
             }
           } catch (error) {
             console.error("Error fetching data:", error);
             document.getElementById("data").textContent = "Failed to load data.";
           }
+        } else {
+          document.getElementById("data").textContent = "Please log in.";
         }
       }
+
       function toggleMenu() {
         var menu = document.querySelector(".menu");
         menu.style.display = menu.style.display === "flex" ? "none" : "flex";
