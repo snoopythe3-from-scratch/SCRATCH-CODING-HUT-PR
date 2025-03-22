@@ -146,18 +146,11 @@
       </div>
     </nav>
 
-    <h1 id="user" style="text-align: center"><b>Coding Hut</b></h1>
-    <h2 style="text-align: center">Welcome to your dashboard</h2>
-    <p id="data" style="text-align: center">COMING SOON</p>
+    <h1 id="user" style="text-align: center"><b>Login to see your dashboard!</b></h1>
+    <h2 style="text-align: center">Welcome to your dashboard!</h2>
+    <p id="data" style="text-align: center">Loading...</p>
 
-    <div class="settings-form">
-      <h3>Update Your Settings</h3>
-      <form id="settings-form">
-        <input type="email" id="email" placeholder="Update your email" />
-        <input type="number" id="points" placeholder="Update your points" />
-        <button type="submit">Save Settings</button>
-      </form>
-    </div>
+
 
     <script>
       async function loadUserData() {
@@ -179,48 +172,6 @@
           }
         }
       }
-
-      async function updateUserSettings(event) {
-        event.preventDefault();
-
-        const username = localStorage.getItem("username");
-        const email = document.getElementById("email").value;
-        const points = document.getElementById("points").value;
-
-        if (!email && !points) {
-          alert("Please enter at least one value to update.");
-          return;
-        }
-
-        const updatedData = {};
-        if (email) updatedData.email = email;
-        if (points) updatedData.points = parseInt(points);
-
-        try {
-          const res = await fetch(`https://scratch-coding-hut-data.onrender.com/${username}`, {
-            method: "PUT",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(updatedData),
-          });
-
-          const data = await res.json();
-
-          if (data) {
-            document.getElementById("data").textContent = JSON.stringify(data);
-            alert("Settings updated successfully!");
-          } else {
-            alert("Error updating settings.");
-          }
-        } catch (error) {
-          console.error("Error updating data:", error);
-          alert("Failed to update settings.");
-        }
-      }
-
-      document.getElementById("settings-form").addEventListener("submit", updateUserSettings);
-
       function toggleMenu() {
         var menu = document.querySelector(".menu");
         menu.style.display = menu.style.display === "flex" ? "none" : "flex";
