@@ -61,10 +61,18 @@
             text-decoration: none;
             color: white;
         }
+        a.kRxZy-link {
+            color: #4CAF50; /* Green shade that blends well */
+            font-weight: bold;
+        }
+        a.kRxZy-link:hover {
+            color: #388E3C;
+        }
     </style>
     <script>
         const secretCode = '972'; 
 
+        // Generate a key by shifting the baseKey based on the secret code
         function generateKeyFromCode(code) {
             const baseKey = 'abcdefghijklmnopqrstuvwxyz0123456789';
             let shiftedKey = '';
@@ -75,6 +83,7 @@
             return shiftedKey;
         }
 
+        // Encode the username using the generated key
         function encodeUsername(username, key) {
             const baseKey = 'abcdefghijklmnopqrstuvwxyz0123456789';
             let encoded = '';
@@ -89,20 +98,27 @@
             return encoded;
         }
 
+        // On page load, check if the user is logged in
         window.onload = function() {
             if (localStorage.getItem('loggedIn') === 'true') {
                 const username = localStorage.getItem('username');
-                const text = document.getElementById('text');
+                const textElements = document.querySelectorAll('.text');
                 const loggedIn = document.getElementById('loggedIn');
-                
-                text.style.display = 'none';
+
+                // Hide all elements with the class "text"
+                textElements.forEach(function(element) {
+                    element.style.display = 'none';
+                });
+
+                // Show the welcome message
                 loggedIn.style.display = 'block';
-                loggedIn.textContent = `Welcome to your account ${username}!`;
+                loggedIn.textContent = `Welcome to your account, ${username}!`;
             } else {
                 checkAuth();
             }
         };
 
+        // Check for authentication on page load
         function checkAuth() {
             const urlParams = new URLSearchParams(window.location.search);
             const authSuccess = urlParams.get('success');
@@ -123,6 +139,7 @@
             }
         }
 
+        // Redirect to ScratchAuth for authentication
         function registerScratchAuth() {
             const messageBox = document.getElementById("message");
             const redirectLocation = encodeURIComponent(window.location.href);
@@ -137,6 +154,7 @@
             }, 2000);
         }
 
+        // Redirect to APIAuth for authentication
         function registerApiAuth() {
             const messageBox = document.getElementById("message");
             const redirectLocation = encodeURIComponent(window.location.href);
@@ -153,27 +171,37 @@
     </script>
 </head>
 <body>
-    <div id="text" class="header">
+    <!-- Header Content -->
+    <div class="text header">
         <h1>Scratch Authentication</h1>
     </div>
-    <div id="loggedIn" class="header"></div>
+    <div id="loggedIn" class="header" style="display: none;"></div>
 
-    <div id="text" class="content">
+    <!-- Main Content -->
+    <div class="text content">
         <h2>Welcome! Please log in to continue.</h2>
         <button onclick="registerScratchAuth()">Register With ScratchAuth</button>
-        <p id="message" id="text" class="message" aria-live="polite"></p>
-        <p id="text">
+        <p id="message" class="message" aria-live="polite"></p>
+        <p>
             Please note: You will be redirected to an external site (ScratchAuth) for authentication. Once there, 
             choose the "Cloud Data" option for the quickest sign-in method.
-    
-            If you are unable to use the "Cloud Data" option, other sign-in methods are available on Scratch Auth's page, for example, profile commenting.</p>
+
+            If you are unable to use the "Cloud Data" option, other sign-in methods are available on Scratch Auth's page, for example, profile commenting.
+        </p>
     </div>
 
-    <div id="text" class="container">
+    <!-- APIAuth Section -->
+    <div class="text container">
         <h2>Login Using APIAuth</h2>
-        <button onclick="registerApiAuth()">Login With APIAuth (Made by <a href="https://scratch.mit.edu/users/kRxZy_kRxZy/" target="_blank" style="color: blue">kRxZy_kRxZy</a>)</button>
+        <button onclick="registerApiAuth()">Login With APIAuth (Made by 
+            <a href="https://scratch.mit.edu/users/kRxZy_kRxZy/" target="_blank" class="kRxZy-link">kRxZy_kRxZy</a>)</button>
     </div>
-    <div id="text" class="container"><a href="https://github.com/Scratch-Coding-Hut/Scratch-Coding-Hut.github.io/issues/new">
-        <button>Having trouble signing in? Report an issue</button></a><div>
+
+    <!-- Report Issue Section -->
+    <div class="text container">
+        <a href="https://github.com/Scratch-Coding-Hut/Scratch-Coding-Hut.github.io/issues/new">
+            <button>Having trouble signing in? Report an issue</button>
+        </a>
+    </div>
 </body>
 </html>
