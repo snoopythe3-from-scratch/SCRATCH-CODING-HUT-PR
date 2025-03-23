@@ -104,6 +104,7 @@
                 const username = localStorage.getItem('username');
                 const textElements = document.querySelectorAll('.text');
                 const loggedIn = document.getElementById('loggedIn');
+                const tlogged = document.getElementById('textForLogged');
 
                 // Hide all elements with the class "text"
                 textElements.forEach(function(element) {
@@ -113,6 +114,7 @@
                 // Show the welcome message
                 loggedIn.style.display = 'block';
                 loggedIn.textContent = `Welcome to your account, ${username}!`;
+                tlogged.innerHTML = '<center><p>some stuff</p></center>';
             } else {
                 checkAuth();
             }
@@ -178,7 +180,7 @@
     <div id="loggedIn" class="header" style="display: none;"></div>
 
     <!-- Main Content -->
-    <div class="text content">
+    <div id="textForLogged" class="text content">
         <h2>Welcome! Please log in to continue.</h2>
         <button onclick="registerScratchAuth()">Sign In With ScratchAuth</button>
         <p id="message" class="message" aria-live="polite"></p>
