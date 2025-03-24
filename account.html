@@ -143,7 +143,7 @@
 
         // Redirect to ScratchAuth for authentication
         function registerScratchAuth() {
-            const messageBox = document.getElementById("message");
+            const messageBox = document.getElementById("scratchMessage");
             const redirectLocation = encodeURIComponent(window.location.href);
 
             const authUrl = `https://auth.itinerary.eu.org/auth/?redirect=${redirectLocation}&name=Coding%20Hut&sign_in_method=cloud`;
@@ -158,7 +158,7 @@
 
         // Redirect to APIAuth for authentication
         function registerApiAuth() {
-            const messageBox = document.getElementById("message");
+            const messageBox = document.getElementById("apiMessage");
             const redirectLocation = encodeURIComponent(window.location.href);
 
             const authUrl = `https://ubbload.netlify.app/login?redirect=${redirectLocation}`;
@@ -183,7 +183,7 @@
     <div id="textForLogged" class="text content">
         <h2>Welcome! Please log in to continue.</h2>
         <button onclick="registerScratchAuth()">Sign In With ScratchAuth</button>
-        <p id="message" class="message" aria-live="polite"></p>
+        <p id="scratchMessage" class="message" aria-live="polite"></p>
         <p>
             Please note: You will be redirected to an external site (ScratchAuth) for authentication. Once there, 
             choose the "Cloud Data" option for the quickest sign-in method.
@@ -197,7 +197,7 @@
         <h2>Login Using APIAuth</h2>
         <button onclick="registerApiAuth()">Login With APIAuth (Made by 
             <a href="https://scratch.mit.edu/users/kRxZy_kRxZy/" target="_blank" class="kRxZy-link">kRxZy_kRxZy</a>)</button>
-        <p id="message" class="message" aria-live="polite"></p>
+        <p id="apiMessage" class="message" aria-live="polite"></p>
         <p>
             APIAuth, made by <a href="https://scratch.mit.edu/users/kRxZy_kRxZy/" target="_blank" class="kRxZy-link">kRxZy_kRxZy</a>, is the next generation of Scratch Authentication.
             You only need to enter your username, put a code in your bio, click Done, and then remove the code. Then, you are logged in.
