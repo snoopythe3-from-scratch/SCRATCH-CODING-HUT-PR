@@ -115,17 +115,35 @@
                 const username = localStorage.getItem('username');
                 const textElements = document.querySelectorAll('.text');
                 const loggedIn = document.getElementById('loggedIn');
-                const tlogged = document.getElementById('textForLogged');
+                const tlogged = document.getElementById('hide');
+                const mainText = document.getElementById('mainText')
 
                 // Hide all elements with the class "text"
                 textElements.forEach(function (element) {
                     element.style.display = 'none';
-                });
-
+                })
+                const res = await fetch(`https://scratchgems.onrender.com/api/data/${username}`);
+                if (!res.ok) {
+                    throw new Error('Failed to fetch data');
+                }
+                const data = await res.json();
+                
                 // Show the welcome message
                 loggedIn.style.display = 'block';
                 loggedIn.textContent = `Welcome to your account, ${username}!`;
-                tlogged.innerHTML = '<center><p>some stuff</p></center>';
+                tlogged.style.display = 'none';
+                
+                if (data && data.pendingorders !== undefined && data.completedorders !== undefined) {
+                    mainText.innerHTML = `
+                        <p>Pending Orders: ${data.pendingorders}</p>
+                        <br>
+                        <p>Completed Orders: ${data.completedorders}</p>
+                        <br>
+                    `;
+                } else {
+                    mainText.innerHTML = `<p>Error loading order data.</p>`;
+                }
+
             } else {
                 checkAuth();
             }
@@ -191,7 +209,9 @@
     <div id="loggedIn" class="header" style="display: none;"></div>
 
     <!-- Main Content -->
-    <div id="textForLogged" class="text content">
+    <div id="mainText" class="text content"></div>
+     <div id="hide" class="text content">
+    <div class="text content">
         <h2>Welcome! Please log in to continue.</h2>
         <button onclick="registerScratchAuth()">Sign In With ScratchAuth</button>
         <p id="scratchMessage" class="message" aria-live="polite"></p>
@@ -218,5 +238,6 @@
             <button>Having trouble signing in? Report an issue</button>
         </a>
     </div>
+     </div>
 </body>
 </html>
