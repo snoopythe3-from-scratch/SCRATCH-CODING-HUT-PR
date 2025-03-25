@@ -109,43 +109,67 @@
             return encoded;
         }
 
-        // On page load, check if the user is logged in
-        window.onload = function () {
-            if (localStorage.getItem('loggedIn') === 'true') {
-                const username = localStorage.getItem('username');
-                const textElements = document.querySelectorAll('.text');
-                const loggedIn = document.getElementById('loggedIn');
-                const tlogged = document.getElementById('hide');
-                const mainText = document.getElementById('mainText')
-
-                // Hide all elements with the class "text"
-                textElements.forEach(function (element) {
-                    element.style.display = 'none';
-                })
-                const res = await fetch(`https://scratchgems.onrender.com/api/data/${username}`);
-                if (!res.ok) {
-                    throw new Error('Failed to fetch data');
-                }
-                const data = await res.json();
-                
-                // Show the welcome message
-                loggedIn.style.display = 'block';
-                loggedIn.textContent = `Welcome to your account, ${username}!`;
-                tlogged.style.display = 'none';
-                
-                if (data && data.pendingorders !== undefined && data.completedorders !== undefined) {
-                    mainText.innerHTML = `
-                        <p>Pending Orders: ${data.pendingorders}</p>
-                        <br>
-                        <p>Completed Orders: ${data.completedorders}</p>
-                        <br>
-                    `;
+        // Decode the username using the generated key
+        function decodeUsername(encodedUsername, key) {
+            const baseKey = 'abcdefghijklmnopqrstuvwxyz0123456789';
+            let decoded = '';
+            for (let char of encodedUsername) {
+                let index = key.indexOf(char);
+                if (index !== -1) {
+                    decoded += baseKey[index];
                 } else {
-                    mainText.innerHTML = `<p>Error loading order data.</p>`;
+                    decoded += char;
                 }
+            }
+            return decoded;
+        }
 
-            } else {
-                checkAuth();
+        // On page load, check if the user is logged in
+        window.onload = async function () {
+            try {
+                if (localStorage.getItem('loggedIn') === 'true') {
+                    const usernameEncoded = localStorage.getItem('username');
+                    const key = generateKeyFromCode(secretCode);
+                    const username = decodeUsername(usernameEncoded, key);
+
+                    const textElements = document.querySelectorAll('.text');
+                    const loggedIn = document.getElementById('loggedIn');
+                    const tlogged = document.getElementById('hide');
+                    const mainText = document.getElementById('mainText');
+
+                    // Hide all elements with the class "text"
+                    textElements.forEach(function (element) {
+                        element.style.display = 'none';
+                    });
+
+                    const res = await fetch(`https://scratchgems.onrender.com/api/data/${username}`);
+                    if (!res.ok) {
+                        throw new Error('Failed to fetch data');
+                    }
+                    const data = await res.json();
+
+                    // Show the welcome message
+                    loggedIn.style.display = 'block';
+                    loggedIn.textContent = `Welcome to your account, ${username}!`;
+                    tlogged.style.display = 'none';
+
+                    if (data && data.pendingorders !== undefined && data.completedorders !== undefined) {
+                        mainText.innerHTML = `
+                            <p>Pending Orders: ${data.pendingorders}</p>
+                            <br>
+                            <p>Completed Orders: ${data.completedorders}</p>
+                            <br>
+                        `;
+                    } else {
+                        mainText.innerHTML = `<p>Error loading order data.</p>`;
+                    }
+                } else {
+                    checkAuth();
+                }
+            } catch (error) {
+                console.error(error);
+                const mainText = document.getElementById('mainText');
+                mainText.innerHTML = `<p>Something went wrong! Please try again later.</p>`;
             }
         };
 
@@ -199,6 +223,13 @@
                 window.location.href = authUrl;
             }, 2000);
         }
+
+        // Logout function
+        function logout() {
+            localStorage.removeItem('loggedIn');
+            localStorage.removeItem('username');
+            window.location.href = 'login.html';
+        }
     </script>
 </head>
 <body>
@@ -206,38 +237,40 @@
     <div class="text header">
         <h1>Scratch Authentication</h1>
     </div>
-    <div id="loggedIn" class="header" style="display: none;"></div>
+    <div id="loggedIn" class="header" style="display: none;">
+        <button onclick="logout()">Logout</button>
+    </div>
 
     <!-- Main Content -->
     <div id="mainText" class="text content"></div>
-     <div id="hide" class="text content">
-    <div class="text content">
-        <h2>Welcome! Please log in to continue.</h2>
-        <button onclick="registerScratchAuth()">Sign In With ScratchAuth</button>
-        <p id="scratchMessage" class="message" aria-live="polite"></p>
-        <p>
-            Please note: You will be redirected to an external site (ScratchAuth) for authentication. Once there,
-            choose the "Cloud Data" option for the quickest sign-in method.
-        </p>
-    </div>
+    <div id="hide" class="text content">
+        <div class="text content">
+            <h2>Welcome! Please log in to continue.</h2>
+            <button onclick="registerScratchAuth()">Sign In With ScratchAuth</button>
+            <p id="scratchMessage" class="message" aria-live="polite"></p>
+            <p>
+                Please note: You will be redirected to an external site (ScratchAuth) for authentication. Once there,
+                choose the "Cloud Data" option for the quickest sign-in method.
+            </p>
+        </div>
 
-    <!-- APIAuth Section -->
-    <div class="text container">
-        <h2>Login Using APIAuth</h2>
-        <button onclick="registerApiAuth()">Login With APIAuth (Made by
-            <a href="https://scratch.mit.edu/users/kRxZy_kRxZy/" target="_blank" class="kRxZy-link">kRxZy_kRxZy</a>)</button>
-        <p id="apiMessage" class="message" aria-live="polite"></p>
-        <p>
-            APIAuth, made by <a href="https://scratch.mit.edu/users/kRxZy_kRxZy/" target="_blank" class="kRxZy-link">kRxZy_kRxZy</a>, is the next generation of Scratch Authentication.
-        </p>
-    </div>
+        <!-- APIAuth Section -->
+        <div class="text container">
+            <h2>Login Using APIAuth</h2>
+            <button onclick="registerApiAuth()">Login With APIAuth (Made by
+                <a href="https://scratch.mit.edu/users/kRxZy_kRxZy/" target="_blank" class="kRxZy-link">kRxZy_kRxZy</a>)</button>
+            <p id="apiMessage" class="message" aria-live="polite"></p>
+            <p>
+                APIAuth, made by <a href="https://scratch.mit.edu/users/kRxZy_kRxZy/" target="_blank" class="kRxZy-link">kRxZy_kRxZy</a>, is the next generation of Scratch Authentication.
+            </p>
+        </div>
 
-    <!-- Report Issue Section -->
-    <div class="text container">
-        <a href="https://github.com/Scratch-Coding-Hut/Scratch-Coding-Hut.github.io/issues/new">
-            <button>Having trouble signing in? Report an issue</button>
-        </a>
+        <!-- Report Issue Section -->
+        <div class="text container">
+            <a href="https://github.com/Scratch-Coding-Hut/Scratch-Coding-Hut.github.io/issues/new">
+                <button>Having trouble signing in? Report an issue</button>
+            </a>
+        </div>
     </div>
-     </div>
 </body>
 </html>
