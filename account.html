@@ -74,8 +74,13 @@
         function generateThreeDigitCode() {
           return Math.floor(100 + Math.random() * 900);
        }
+        if (!localStorage.getItem('baseCode')) {
+          const secretCode = generateThreeDigitCode();
+          localStorage.setItem('baseCode', secretCode);
+        } else {
+            const secretCode = localStorage.getItem('baseCode');
+        } 
 
-        const secretCode = generateThreeDigitCode();
 
         // Generate a key by shifting the baseKey based on the secret code
         function generateKeyFromCode(code) {
