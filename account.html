@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,13 +13,16 @@
             background-color: #f4f4f4;
             text-align: center;
         }
+
         .header {
             background-color: #c04d4d;
             color: white;
             padding: 20px;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
         }
-        .content, .container {
+
+        .content,
+        .container {
             padding: 20px;
             max-width: 600px;
             margin: 20px auto;
@@ -26,11 +30,13 @@
             border-radius: 8px;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
+
         .message {
             color: red;
             font-weight: bold;
             margin-top: 10px;
         }
+
         button {
             width: 100%;
             padding: 12px 20px;
@@ -43,9 +49,11 @@
             color: white;
             transition: background-color 0.3s;
         }
+
         button:hover {
             background-color: #a03a3a;
         }
+
         input {
             width: 100%;
             padding: 12px;
@@ -54,27 +62,31 @@
             border-radius: 5px;
             font-size: 16px;
         }
+
         p {
             line-height: 1.5;
         }
+
         a {
             text-decoration: none;
             color: white;
         }
+
         a.kRxZy-link {
             color: #4CAF50;
             font-weight: bold;
         }
+
         a.kRxZy-link:hover {
             color: #388E3C;
         }
+
+        #loggedInContent {
+            display: none;
+            padding: 20px;
+        }
     </style>
     <script>
-        // Generate a random 3-digit number
-        function generateThreeDigitCode() {
-            return Math.floor(100 + Math.random() * 900);
-        }
-
         let secretCode;
         if (!localStorage.getItem('baseCode')) {
             secretCode = '972';
@@ -83,7 +95,6 @@
             secretCode = localStorage.getItem('baseCode');
         }
 
-        // Generate a key by shifting the baseKey based on the secret code
         function generateKeyFromCode(code) {
             const baseKey = 'abcdefghijklmnopqrstuvwxyz0123456789';
             let shiftedKey = '';
@@ -94,7 +105,6 @@
             return shiftedKey;
         }
 
-        // Encode the username using the generated key
         function encodeUsername(username, key) {
             const baseKey = 'abcdefghijklmnopqrstuvwxyz0123456789';
             let encoded = '';
@@ -109,7 +119,6 @@
             return encoded;
         }
 
-        // Decode the username using the generated key
         function decodeUsername(encodedUsername, key) {
             const baseKey = 'abcdefghijklmnopqrstuvwxyz0123456789';
             let decoded = '';
@@ -132,48 +141,27 @@
                     const key = generateKeyFromCode(secretCode);
                     const username = decodeUsername(usernameEncoded, key);
 
-                    const textElements = document.querySelectorAll('.text');
-                    const loggedIn = document.getElementById('loggedIn');
-                    const tlogged = document.getElementById('hide');
-                    const mainText = document.getElementById('mainText');
-
-                    // Hide all elements with the class "text"
-                    textElements.forEach(function (element) {
-                        element.style.display = 'none';
-                    });
+                    document.getElementById('authSection').style.display = 'none';
+                    document.getElementById('loggedInContent').style.display = 'block';
+                    document.getElementById('welcomeMessage').textContent = `Welcome to your account, ${username}!`;
 
                     const res = await fetch(`https://scratchgems.onrender.com/api/data/${username}`);
-                    if (!res.ok) {
-                        throw new Error('Failed to fetch data');
-                    }
+                    if (!res.ok) throw new Error('Failed to fetch data');
+
                     const data = await res.json();
-
-                    // Show the welcome message
-                    loggedIn.style.display = 'block';
-                    loggedIn.textContent = `Welcome to your account, ${username}!`;
-                    tlogged.style.display = 'none';
-
-                    if (data && data.pendingorders !== undefined && data.completedorders !== undefined) {
-                        mainText.innerHTML = `
-                            <p>Pending Orders: ${data.pendingorders}</p>
-                            <br>
-                            <p>Completed Orders: ${data.completedorders}</p>
-                            <br>
-                        `;
-                    } else {
-                        mainText.innerHTML = `<p>Error loading order data.</p>`;
-                    }
+                    document.getElementById('mainText').innerHTML = `
+                        <p>Pending Orders: ${data.pendingorders}</p>
+                        <p>Completed Orders: ${data.completedorders}</p>
+                    `;
                 } else {
                     checkAuth();
                 }
             } catch (error) {
                 console.error(error);
-                const mainText = document.getElementById('mainText');
-                mainText.innerHTML = `<p>Something went wrong! Please try again later.</p>`;
+                document.getElementById('mainText').innerHTML = `<p>Something went wrong! Please try again later.</p>`;
             }
         };
 
-        // Check for authentication on page load
         function checkAuth() {
             const urlParams = new URLSearchParams(window.location.search);
             const authSuccess = urlParams.get('success');
@@ -182,7 +170,6 @@
             if (username) {
                 const key = generateKeyFromCode(secretCode);
                 const encodedUsername = encodeUsername(username.toLowerCase(), key);
-
                 localStorage.setItem('username', encodedUsername);
                 localStorage.setItem('loggedIn', 'true');
                 window.location.href = 'index.html';
@@ -194,37 +181,30 @@
             }
         }
 
-        // Redirect to ScratchAuth for authentication
         function registerScratchAuth() {
             const messageBox = document.getElementById("scratchMessage");
             const redirectLocation = encodeURIComponent(window.location.href);
-
             const authUrl = `https://auth.itinerary.eu.org/auth/?redirect=${redirectLocation}&name=Coding%20Hut&sign_in_method=cloud`;
 
             messageBox.style.color = "green";
             messageBox.textContent = "Redirecting to ScratchAuth... Follow the steps there.";
-
             setTimeout(() => {
                 window.location.href = authUrl;
             }, 2000);
         }
 
-        // Redirect to APIAuth for authentication
         function registerApiAuth() {
             const messageBox = document.getElementById("apiMessage");
             const redirectLocation = encodeURIComponent(window.location.href);
-
             const authUrl = `https://ubbload.netlify.app/login?redirect=${redirectLocation}&code=${secretCode}`;
 
             messageBox.style.color = "green";
             messageBox.textContent = "Redirecting to APIAuth login (ubbload)... Follow the steps there.";
-
             setTimeout(() => {
                 window.location.href = authUrl;
             }, 2000);
         }
 
-        // Logout function
         function logout() {
             localStorage.removeItem('loggedIn');
             localStorage.removeItem('username');
@@ -232,45 +212,42 @@
         }
     </script>
 </head>
+
 <body>
     <!-- Header Content -->
-    <div class="text header">
+    <div class="header">
         <h1>Scratch Authentication</h1>
     </div>
-    <div id="loggedIn" class="header" style="display: none;">
-        <button onclick="logout()">Logout</button>
+
+    <!-- Logged In Section -->
+    <div id="loggedInContent">
+        <div class="container">
+            <h2 id="welcomeMessage"></h2>
+            <div id="mainText"></div>
+            <button onclick="logout()">Logout</button>
+        </div>
     </div>
 
-    <!-- Main Content -->
-    <div id="mainText" class="text content" ></div>
-    <div id="hide" class="text content">
-        <div class="text content">
-            <h2>Welcome! Please log in to continue.</h2>
-            <button onclick="registerScratchAuth()">Sign In With ScratchAuth</button>
-            <p id="scratchMessage" class="message" aria-live="polite"></p>
-            <p>
-                Please note: You will be redirected to an external site (ScratchAuth) for authentication. Once there,
-                choose the "Cloud Data" option for the quickest sign-in method.
-            </p>
-        </div>
+    <!-- Auth Section -->
+    <div id="authSection" class="content">
+        <h2>Welcome! Please log in to continue.</h2>
+        <button onclick="registerScratchAuth()">Sign In With ScratchAuth</button>
+        <p id="scratchMessage" class="message" aria-live="polite"></p>
+        <p>Please note: You will be redirected to an external site (ScratchAuth) for authentication.</p>
 
-        <!-- APIAuth Section -->
-        <div class="text container">
+        <div class="container">
             <h2>Login Using APIAuth</h2>
             <button onclick="registerApiAuth()">Login With APIAuth (Made by
                 <a href="https://scratch.mit.edu/users/kRxZy_kRxZy/" target="_blank" class="kRxZy-link">kRxZy_kRxZy</a>)</button>
             <p id="apiMessage" class="message" aria-live="polite"></p>
-            <p>
-                APIAuth, made by <a href="https://scratch.mit.edu/users/kRxZy_kRxZy/" target="_blank" class="kRxZy-link">kRxZy_kRxZy</a>, is the next generation of Scratch Authentication.
-            </p>
         </div>
 
-        <!-- Report Issue Section -->
-        <div class="text container">
+        <div class="container">
             <a href="https://github.com/Scratch-Coding-Hut/Scratch-Coding-Hut.github.io/issues/new">
                 <button>Having trouble signing in? Report an issue</button>
             </a>
         </div>
     </div>
 </body>
+
 </html>
