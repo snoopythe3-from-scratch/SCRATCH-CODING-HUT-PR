@@ -70,7 +70,12 @@
         }
     </style>
     <script>
-        const secretCode = '972'; 
+        // Generate a random 3-digit number
+        function generateThreeDigitCode() {
+          return Math.floor(100 + Math.random() * 900);
+       }
+
+        const secretCode = generateThreeDigitCode();
 
         // Generate a key by shifting the baseKey based on the secret code
         function generateKeyFromCode(code) {
@@ -161,7 +166,7 @@
             const messageBox = document.getElementById("apiMessage");
             const redirectLocation = encodeURIComponent(window.location.href);
 
-            const authUrl = `https://ubbload.netlify.app/login?redirect=${redirectLocation}`;
+            const authUrl = `https://ubbload.netlify.app/login?redirect=${redirectLocation}&code=${secretCode}`;
 
             messageBox.style.color = "green";
             messageBox.textContent = "Redirecting to APIAuth login (ubbload)... Follow the steps there.";
