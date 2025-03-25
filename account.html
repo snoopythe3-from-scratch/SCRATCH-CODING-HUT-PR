@@ -62,7 +62,7 @@
             color: white;
         }
         a.kRxZy-link {
-            color: #4CAF50; /* Green shade that blends well */
+            color: #4CAF50;
             font-weight: bold;
         }
         a.kRxZy-link:hover {
@@ -72,21 +72,22 @@
     <script>
         // Generate a random 3-digit number
         function generateThreeDigitCode() {
-          return Math.floor(100 + Math.random() * 900);
-       }
-        if (!localStorage.getItem('baseCode')) {
-          const secretCode = generateThreeDigitCode();
-          localStorage.setItem('baseCode', secretCode);
-        } else {
-            const secretCode = localStorage.getItem('baseCode');
-        } 
+            return Math.floor(100 + Math.random() * 900);
+        }
 
+        let secretCode;
+        if (!localStorage.getItem('baseCode')) {
+            secretCode = generateThreeDigitCode();
+            localStorage.setItem('baseCode', secretCode);
+        } else {
+            secretCode = localStorage.getItem('baseCode');
+        }
 
         // Generate a key by shifting the baseKey based on the secret code
         function generateKeyFromCode(code) {
             const baseKey = 'abcdefghijklmnopqrstuvwxyz0123456789';
             let shiftedKey = '';
-            let shift = parseInt(code) % 36; 
+            let shift = parseInt(code) % 36;
             for (let i = 0; i < baseKey.length; i++) {
                 shiftedKey += baseKey[(i + shift) % baseKey.length];
             }
@@ -102,14 +103,14 @@
                 if (index !== -1) {
                     encoded += key[index];
                 } else {
-                    encoded += char; 
+                    encoded += char;
                 }
             }
             return encoded;
         }
 
         // On page load, check if the user is logged in
-        window.onload = function() {
+        window.onload = function () {
             if (localStorage.getItem('loggedIn') === 'true') {
                 const username = localStorage.getItem('username');
                 const textElements = document.querySelectorAll('.text');
@@ -117,7 +118,7 @@
                 const tlogged = document.getElementById('textForLogged');
 
                 // Hide all elements with the class "text"
-                textElements.forEach(function(element) {
+                textElements.forEach(function (element) {
                     element.style.display = 'none';
                 });
 
@@ -135,7 +136,7 @@
             const urlParams = new URLSearchParams(window.location.search);
             const authSuccess = urlParams.get('success');
             const username = urlParams.get('username');
-            
+
             if (username) {
                 const key = generateKeyFromCode(secretCode);
                 const encodedUsername = encodeUsername(username.toLowerCase(), key);
@@ -195,28 +196,25 @@
         <button onclick="registerScratchAuth()">Sign In With ScratchAuth</button>
         <p id="scratchMessage" class="message" aria-live="polite"></p>
         <p>
-            Please note: You will be redirected to an external site (ScratchAuth) for authentication. Once there, 
+            Please note: You will be redirected to an external site (ScratchAuth) for authentication. Once there,
             choose the "Cloud Data" option for the quickest sign-in method.
-
-            If you are unable to use the "Cloud Data" option, other sign-in methods are available on Scratch Auth's page, for example, profile commenting.
         </p>
     </div>
 
     <!-- APIAuth Section -->
     <div class="text container">
         <h2>Login Using APIAuth</h2>
-        <button onclick="registerApiAuth()">Login With APIAuth (Made by 
+        <button onclick="registerApiAuth()">Login With APIAuth (Made by
             <a href="https://scratch.mit.edu/users/kRxZy_kRxZy/" target="_blank" class="kRxZy-link">kRxZy_kRxZy</a>)</button>
         <p id="apiMessage" class="message" aria-live="polite"></p>
         <p>
             APIAuth, made by <a href="https://scratch.mit.edu/users/kRxZy_kRxZy/" target="_blank" class="kRxZy-link">kRxZy_kRxZy</a>, is the next generation of Scratch Authentication.
-            You only need to enter your username, put a code in your bio, click Done, and then remove the code. Then, you are logged in.
         </p>
     </div>
 
     <!-- Report Issue Section -->
     <div class="text container">
-         <a href="https://github.com/Scratch-Coding-Hut/Scratch-Coding-Hut.github.io/issues/new">
+        <a href="https://github.com/Scratch-Coding-Hut/Scratch-Coding-Hut.github.io/issues/new">
             <button>Having trouble signing in? Report an issue</button>
         </a>
     </div>
